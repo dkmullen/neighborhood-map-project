@@ -1,5 +1,5 @@
 var map;
-var markers = [
+var myPlaces = [
 	{position: {lat: 35.883324, lng: -84.523895},
 		map: map,
 		title: "Mama Mia's Restaurant-Pizzeria"
@@ -25,25 +25,32 @@ var markers = [
 		title: "Kingston Community Center"
 	}
 ];
+function place(data) {	
+	this.position = ko.observable(data.position);
+	this.title = ko.observable(data.title);
+};
 
 function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 35.8796114, lng: -84.5159483},
-    zoom: 16
-  });
-  
-for (i = 0; i < markers.length; i++) {
-	var marker = new google.maps.Marker({
-		position: markers[i].position,
-		map: map,
-		title: markers[i].title
+	map = new google.maps.Map(document.getElementById('map'), {
+		center: {lat: 35.8796114, lng: -84.5159483},
+		zoom: 16
 	});
+	var marker = new google.maps.Marker({
+			position: data.position,
+			map: map,
+			title: data.title
+	});	
 };
 
-}
-//TODO - Get the map into the view model
 var ViewModel = function() {
-
+	var self = this;
+	
+	this.placeList = ko.observableArray([]);
+	
+	myPlaces.forEach(function(placeItem) {
+		self.placeList.push( new place(placeItem) );
+	});
+	console.log(placeList);
 };
-ko.applyBindings(new ViewModel())
+ko.applyBindings(ViewModel);  
 
