@@ -25,32 +25,26 @@ var myPlaces = [
 		title: "Kingston Community Center"
 	}
 ];
-function place(data) {	
-	this.position = ko.observable(data.position);
-	this.title = ko.observable(data.title);
-};
 
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: {lat: 35.8796114, lng: -84.5159483},
 		zoom: 16
-	});
-	var marker = new google.maps.Marker({
-			position: data.position,
-			map: map,
-			title: data.title
 	});	
+	
+	for (i = 0; i < myPlaces.length; i++) {
+		var marker = new google.maps.Marker({
+			animation: google.maps.Animation.DROP,
+			position: myPlaces[i].position,
+			map: map,
+			title: myPlaces[i].title	
+		});
+		
+		var node = document.createElement('li');
+		var t = document.createTextNode(myPlaces[i].title);
+		node.appendChild(t);
+		document.getElementById('menu').appendChild(node);
+	}
 };
 
-var ViewModel = function() {
-	var self = this;
-	
-	this.placeList = ko.observableArray([]);
-	
-	myPlaces.forEach(function(placeItem) {
-		self.placeList.push( new place(placeItem) );
-	});
-	console.log(placeList);
-};
-ko.applyBindings(ViewModel);  
 
