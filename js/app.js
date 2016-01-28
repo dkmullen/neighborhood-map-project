@@ -87,9 +87,24 @@ function initMap() {
 	
 	function showInfoWindow(x, marker) {
 		infowindow = new google.maps.InfoWindow({
-			content: x.description
+			content: x.description,
+			maxWidth: 200
 		});
 		infowindow.open(map, marker);
+	};
+	
+	function toggleBounce() {
+	  if (marker.getAnimation() !== null) {
+		marker.setAnimation(null);
+	  } else {
+		marker.setAnimation(google.maps.Animation.BOUNCE);
+		
+		//Found this setTimout solution on StackOverflow by Simon Steinberger
+		//http://stackoverflow.com/questions/7339200/bounce-a-pin-in-google-maps-once
+		//http://stackoverflow.com/users/996638/simon-steinberger
+		//Makes the marker bounce once and then stop
+		setTimeout(function(){ marker.setAnimation(null); }, 750);
+	  }
 	};
 	
 	function match(x) {
@@ -97,6 +112,7 @@ function initMap() {
 			if (markers[i].title == x.title) {
 				marker = markers[i];
 				showInfoWindow(x, marker);
+				toggleBounce(x, marker);
 			} 
 		}
 	};	
