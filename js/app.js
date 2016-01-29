@@ -57,9 +57,14 @@ function initMap() {
 		center: {lat: 35.8796114, lng: -84.5159483},
 		zoom: 16
 	});	
-	var place, i, infowindow, marker;
+	var place, i, infowindow, marker, description;
 	var allPlaces = control.getAllPlaces();
 	var markers = [];
+	
+	infowindow = new google.maps.InfoWindow({
+			content: description,
+			maxWidth: 200
+		});
 	
 	for (i = 0; i < allPlaces.length; i++) {
 		place = allPlaces[i];
@@ -83,16 +88,15 @@ function initMap() {
 		var t = document.createTextNode(place.title);
 		node.appendChild(t);
 		document.getElementById('menu').appendChild(node);
+		
+		node.addEventListener('click', (function(placeCopy) {
+			return function() {
+				control.setCurrentPlace(placeCopy);
+				match(placeCopy);
+			};
+		})(place));
 	}
-	
-	function showInfoWindow(x, marker) {
-		infowindow = new google.maps.InfoWindow({
-			content: x.description,
-			maxWidth: 200
-		});
-		infowindow.open(map, marker);
-	};
-	
+
 	function toggleBounce() {
 	  if (marker.getAnimation() !== null) {
 		marker.setAnimation(null);
@@ -111,10 +115,10 @@ function initMap() {
 		for (var i = 0; i < markers.length; i++) {
 			if (markers[i].title == x.title) {
 				marker = markers[i];
-				showInfoWindow(x, marker);
+				infowindow.setContent(x.description);
+				infowindow.open(map, marker); 
 				toggleBounce(x, marker);
 			} 
 		}
 	};	
 };
-
