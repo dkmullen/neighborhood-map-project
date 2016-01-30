@@ -6,37 +6,43 @@ var model = {
 			map: map,
 			title: "Mama Mia's Restaurant-Pizzeria",
 			description: "Mama Mia's: Thin crust pizza and 70s decor",
-			locationID: 17269784
+			locationID: 17269784,
+			type: 'Restaurant'
 		},
 		{position: {lat: 35.8833019, lng: -84.52331630000003},
 			map: map,
 			title: "Smokehouse Bar n Grill",
 			description: "Smokehouse Bar n Grill: The closest thing to a sports bar Kingston is likely to get.",
-			locationID: 17792245
+			locationID: 17792245,
+			type: 'Restaurant'
 		},
 		{position: {lat: 35.882102, lng: -84.505977},
 			map: map,
 			title: "Don Eduardo's Mexican Grill",
 			description: "Don Eduardo's: A bit salty. Water, please?",
-			locationID: 17270326
+			locationID: 17270326,
+			type: 'Restaurant'
 		},
 		{position: {lat: 35.875116, lng: -84.52033013105392},
 			map: map,
 			title: "Roane County High School",
 			description: "Roane County High School: Lord of the Flies 2",
-			locationID: ''
+			locationID: '',
+			type: 'School'
 		},
 		{position: {lat: 35.874415, lng: -84.515031},
 			map: map,
 			title: "Handee Burger",
 			description: "Handee Burger: Greasy, but no spoons",
-			locationID: 17269781
+			locationID: 17269781,
+			type: 'Restaurant'
 		},
-		{position: {lat: 35.876639, lng: -84.521292},
+		{position: {lat: 35.861100, lng: -84.527949},
 			map: map,
-			title: "Kingston Community Center",
-			description: "Kingston Community Center: The center of our community",
-			locationID: ''
+			title: "Fort Southwest Point",
+			description: "Fort Southwest Point: An early American fort",
+			locationID: '',
+			type: 'Park'
 		}
 	]
 };
@@ -60,8 +66,8 @@ var map;
 
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
-		center: {lat: 35.8806844, lng: -84.5150555},
-		zoom: 16
+		center: {lat: 35.8725226, lng: -84.5094442},
+		zoom: 15
 	});	
 	var place, i, infowindow, marker, description;
 	var allPlaces = control.getAllPlaces();
@@ -69,7 +75,7 @@ function initMap() {
 	
 	infowindow = new google.maps.InfoWindow({
 			content: description,
-			maxWidth: 200
+			maxWidth: 275
 		});
 	
 	for (i = 0; i < allPlaces.length; i++) {
@@ -124,7 +130,12 @@ function initMap() {
 				
 				infowindow.open(map, marker); 
 				toggleBounce(x, marker);
-				getZomato(x);
+				if (x.type == 'Restaurant') {
+					getZomato(x);
+				} else {
+					infowindow.setContent(x.description);
+				}
+				
 			} 
 		}
 	};	
@@ -136,13 +147,16 @@ function initMap() {
 			
 		$.getJSON( url, function( business ) {
 			businessStr = 
-			'<h3>' + business.name + '</h3>' +
-			'<p>' + business.location.address + '</p>' +
-			'<p>Cuisine: ' + business.cuisines + '</p>' +
-			'<p>Average Cost for Two: $' + business.average_cost_for_two + '</p>' +
-			'<p>Average Zomato Rating: ' + business.user_rating.aggregate_rating +
+			'<div class="infowindow"><h3>' + business.name + '</h3>' +
+			'<p>' + business.location.address + '<br>' +
+			'<strong>Cuisine:</strong> ' + business.cuisines + '<br>' +
+			'<strong>Average Cost for Two:</strong> $' + business.average_cost_for_two + '</br>' +
+			'<strong>Average Zomato Rating:</strong> ' + business.user_rating.aggregate_rating +
 				' (' + business.user_rating.rating_text + ')</p>' +
-			'<p><img src="' + business.thumb +'"></p>';
+			'<p id="credits"><a href="' + business.url + '" target="new">Powered by Zomato</a></p><div>';
+			if (business.thumb !== 'https://b.zmtcdn.com/images/res_avatar_120_1x_new.png') {
+				businessStr = businessStr + '<div class=infowindow><p><img src="' + business.thumb +'"></p></div>';
+			}
 			infowindow.setContent(businessStr);
 		});
 		

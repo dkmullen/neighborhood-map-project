@@ -1,27 +1,47 @@
 //Practice.js
-var locationID = 17270326;
-var zomatoApiKey = 'eae8f9e214a0616278ac70ef1df3dfce';
-var url = 'https://developers.zomato.com/api/v2.1/restaurant?res_id=' +
-	locationID + '&apikey=' + zomatoApiKey;
 
-function getZomato() {
-	$.getJSON( url, function( business ) {
-		document.getElementById('someplace').innerHTML = 
-		'<h3>' + business.name + '</h3>' +
-			'<p>' + business.location.address + '</p>' +
-			'<p>Cuisine: ' + business.cuisines + '</p>' +
-			'<p>Average Cost for Two: $' + business.average_cost_for_two + '</p>' +
-			'<p>Average Zomato Rating: ' + business.user_rating.aggregate_rating +
-				' (' + business.user_rating.rating_text + ')</p>' +
-			'<p><img src="' + business.thumb +'"></p>';
+function loadData() {
+
+    var $wikiElem = $('#wikipedia-links');
+	var title = 'Fort Southwest Point';
+
+    // clear out old data before new request
+    $wikiElem.text("");
+	
+	//load wiki list
+	var wikiURL = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + title + '&format=json&callback=wikiCallback';
+	
+	//error handling workaround
+	var wikiRequestTimeout = setTimeout(function(){
+         $wikiElem.text("Wikipedia articles could not be loaded.");
+    }, 8000);
+	
+	$.ajax({
+		type: "GET",
+		url: wikiURL,
+		dataType: "jsonp",
+		success: function ( response ) {
+			//response[0] is the search term itself; [1] is the list of results
+			//[2] is a description snippet, [3] is the url to the wiki page!
+			var placeName = response[1];
+			var placeDescrip = response[2];
+			var placeWikiLink = response[3];
+			console.log(wikiURL);
+            $wikiElem.append("<h2><a href='" + placeWikiLink + 
+				"'target='_blank'>" + placeName + "</a></h2>" +
+				"<p>" + placeDescrip + "</p");
+
+			//tell err message not to load if success
+			clearTimeout(wikiRequestTimeout);
+		}
 	});
+
+    return false;
 };
-getZomato();
 
-//eae8f9e214a0616278ac70ef1df3dfce
+$('#form-container').submit(loadData);
 
-/*
+loadData();
 
+//https://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&format=jsonfm&titles=Fort%20Southwest%20Point
 
-
-*/

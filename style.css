@@ -25,3 +25,10 @@ body {
 #menu li:hover {
 	background-color: #000;
 }
+.infowindow {
+	text-align: center;
+	margin: 0 auto;
+}
+#credits {
+	font-size: 80%;
+}
