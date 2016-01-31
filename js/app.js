@@ -128,6 +128,9 @@ function initMap() {
 			if (markers[i].title == x.title) {
 				marker = markers[i];
 				
+				console.log(x.position.lat, x.position.lng);
+				map.panTo({lat: (x.position.lat), lng: (x.position.lng)});
+				//map.panTo(LatLng(x.position.lat, x.position.lng) );
 				infowindow.open(map, marker); 
 				toggleBounce(x, marker);
 				if (x.type == 'Restaurant') {
@@ -141,7 +144,7 @@ function initMap() {
 	};	
 	
 	function getZomato(x) {
-		var zomatoApiKey = 'xxx';
+		var zomatoApiKey = 'eae8f9e214a0616278ac70ef1df3dfce';
 		var url = 'https://developers.zomato.com/api/v2.1/restaurant?res_id=' +
 			x.locationID + '&apikey=' + zomatoApiKey;
 			
