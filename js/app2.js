@@ -44,6 +44,16 @@ var model = {
 			locationID: 'https://api.yelp.com/v2/business/fort-southwest-point-kingston',
 			type: 'Park'
 		}
+	],
+	myOutsideSources: [
+		{vendor: 'Zomato',
+			key: 'xxx',
+			startUrl: 'https://developers.zomato.com/api/v2.1/restaurant?res_id='
+		},
+		{vendor: 'Yelp',
+			key: {},
+			startUrl: 'https://api.yelp.com/v2/business/'
+		}
 	]
 };
 
@@ -56,6 +66,10 @@ var control = {
 	
 	setCurrentPlace: function(place) {
 		model.currentPlace = place;
+	},
+	
+	getAllSources: function() {
+		return model.myOutsideSources;
 	}
 };
 
@@ -153,9 +167,15 @@ function initMap() {
 	};	
 	
 	function getZomato(x) {
-		var zomatoApiKey = 'xxx';
-		var url = 'https://developers.zomato.com/api/v2.1/restaurant?res_id=' +
-			x.locationID + '&apikey=' + zomatoApiKey;
+		var allSources = control.getAllSources();
+		var currentSource = [];
+		for (var i = 0; i < allSources.length; i++) {
+			if (allSources[i].vendor == 'Zomato') {
+				currentSource.push(allSources[i]);
+			}
+		}
+		var url = currentSource[0].startUrl + x.locationID + '&apikey=' + currentSource[0].key;
+		console.log(currentSource);
 			
 		$.getJSON( url, function( business ) {
 			businessStr = 
