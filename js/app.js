@@ -66,8 +66,17 @@ var map;
 
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
-		center: {lat: 35.8725226, lng: -84.5094442},
-		zoom: 15
+		center: {lat: 35.874415, lng: -84.515031},
+		zoom: 15,
+		zoomControl: true,
+		zoomControlOptions: {
+			position: google.maps.ControlPosition.LEFT_CENTER
+		},
+		scaleControl: true,
+		streetViewControl: true,
+		streetViewControlOptions: {
+			position: google.maps.ControlPosition.LEFT_TOP
+		}
 	});	
 	var place, i, infowindow, marker, description;
 	var allPlaces = control.getAllPlaces();
@@ -144,7 +153,7 @@ function initMap() {
 	};	
 	
 	function getZomato(x) {
-		var zomatoApiKey = 'eae8f9e214a0616278ac70ef1df3dfce';
+		var zomatoApiKey = 'xxx';
 		var url = 'https://developers.zomato.com/api/v2.1/restaurant?res_id=' +
 			x.locationID + '&apikey=' + zomatoApiKey;
 			
@@ -164,6 +173,42 @@ function initMap() {
 		});
 		
 	};
-};
-// 
 
+	//This solution for keeping the map centered on viewport resize comes from:
+	//http://stackoverflow.com/questions/8792676/center-google-maps-v3-on-browser-resize-responsive
+	//http://stackoverflow.com/users/127550/gregory-bolkenstijn
+	function calculateCenter() {
+		center = map.getCenter();
+	}
+	google.maps.event.addDomListener(map, 'idle', function() {
+		calculateCenter();
+	});
+	google.maps.event.addDomListener(window, 'resize', function() {
+		map.setCenter(center);
+	});
+
+	map.fitBounds(
+		{south:35.856494, west:-84.532931, north:35.885037, east:-84.507149}
+	);
+
+};
+
+var ViewModel = function() {
+	document.getElementById('hamburger-menu').innerHTML =
+		'<button type="button" class="hamburger-button" data-bind="click: toggle">' +	
+			'<span class="horiz-bar"></span>' +
+			'<span class="horiz-bar"></span>' +
+			'<span class="horiz-bar"></span></button>';
+			
+	this.toggle=function() {
+		var e = document.getElementById('menu');
+		if (e.style.display == 'block') {
+			e.style.display = 'none';
+			} else {
+				e.style.display = 'block';
+			}
+		console.log('toggle!');
+	};
+	
+};
+ko.applyBindings(new ViewModel())
