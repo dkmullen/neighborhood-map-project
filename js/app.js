@@ -12,7 +12,8 @@ var model = {
 		{position: {lat: 35.8833019, lng: -84.52331630000003},
 			map: map,
 			title: "Smokehouse Bar n Grill",
-			description: "Smokehouse Bar n Grill: The closest thing to a sports bar Kingston is likely to get.",
+			description: 'Smokehouse Bar n Grill: The closest thing to a ' +  
+				'sports bar Kingston is likely to get.',
 			locationID: 17792245,
 			type: 'Restaurant'
 		},
@@ -41,8 +42,18 @@ var model = {
 			map: map,
 			title: "Fort Southwest Point",
 			description: "Fort Southwest Point: An early American fort",
-			locationID: 'https://api.yelp.com/v2/business/fort-southwest-point-kingston',
+			locationID: 'fort-southwest-point-kingston',
 			type: 'Park'
+		}
+	],
+	myOutsideSources: [
+		{vendor: 'Zomato',
+			key: 'xxx',
+			startUrl: 'https://developers.zomato.com/api/v2.1/restaurant?res_id='
+		},
+		{vendor: 'Yelp',
+			key: {},
+			startUrl: 'https://api.yelp.com/v2/business/'
 		}
 	]
 };
@@ -56,6 +67,10 @@ var control = {
 	
 	setCurrentPlace: function(place) {
 		model.currentPlace = place;
+	},
+	
+	getAllSources: function() {
+		return model.myOutsideSources;
 	}
 };
 
@@ -153,9 +168,15 @@ function initMap() {
 	};	
 	
 	function getZomato(x) {
-		var zomatoApiKey = 'xxx';
-		var url = 'https://developers.zomato.com/api/v2.1/restaurant?res_id=' +
-			x.locationID + '&apikey=' + zomatoApiKey;
+		var allSources = control.getAllSources();
+		var currentSource = [];
+		for (var i = 0; i < allSources.length; i++) {
+			if (allSources[i].vendor == 'Zomato') {
+				currentSource.push(allSources[i]);
+			}
+		}
+		var url = currentSource[0].startUrl + x.locationID + '&apikey=' + currentSource[0].key;
+		console.log(currentSource);
 			
 		$.getJSON( url, function( business ) {
 			businessStr = 
@@ -195,12 +216,8 @@ function initMap() {
 
 };
 
-var ViewModel = function() {
-	document.getElementById('hamburger-menu').innerHTML =
-		'<button type="button" class="hamburger-button" data-bind="click: toggle">' +	
-			'<span class="horiz-bar"></span>' +
-			'<span class="horiz-bar"></span>' +
-			'<span class="horiz-bar"></span></button>';
+function ViewModel() {
+	var self = this;
 			
 	this.toggle=function() {
 		var e = document.getElementById('menu');
@@ -209,7 +226,6 @@ var ViewModel = function() {
 			} else {
 				e.style.display = 'block';
 			}
-		console.log('toggle!');
 	};
 	
 };

@@ -12,7 +12,8 @@ var model = {
 		{position: {lat: 35.8833019, lng: -84.52331630000003},
 			map: map,
 			title: "Smokehouse Bar n Grill",
-			description: "Smokehouse Bar n Grill: The closest thing to a sports bar Kingston is likely to get.",
+			description: 'Smokehouse Bar n Grill: The closest thing to a ' +  
+				'sports bar Kingston is likely to get.',
 			locationID: 17792245,
 			type: 'Restaurant'
 		},
@@ -41,7 +42,7 @@ var model = {
 			map: map,
 			title: "Fort Southwest Point",
 			description: "Fort Southwest Point: An early American fort",
-			locationID: 'https://api.yelp.com/v2/business/fort-southwest-point-kingston',
+			locationID: 'fort-southwest-point-kingston',
 			type: 'Park'
 		}
 	],
@@ -70,13 +71,15 @@ var control = {
 	
 	getAllSources: function() {
 		return model.myOutsideSources;
+	},
+	hello: function() {
+		console.log('Hello');
 	}
 };
 
-
 //View
-
-var map;
+//var map = new initMap();
+//var infowindow = new initInfoWindow();
 
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
@@ -92,14 +95,42 @@ function initMap() {
 			position: google.maps.ControlPosition.LEFT_TOP
 		}
 	});	
+};	
+
+function initInfoWindow() {
+	infowindow = new google.maps.InfoWindow({
+			content: description,
+			maxWidth: 275
+		})
+};
+
+function ViewModel() {
+	var self = this;
+	var allPlaces = control.getAllPlaces();
+	self.places = ko.observableArray([]);
+	for (var i = 0; i < allPlaces.length; i++) {
+		self.places.push(allPlaces[i]);
+	};
+	
+	this.toggle=function() {
+		var e = document.getElementById('menu');
+		if (e.style.display == 'block') {
+			e.style.display = 'none';
+			} else {
+				e.style.display = 'block';
+			}
+	};
+
+};
+ko.applyBindings(new ViewModel());
+
+/**
+
 	var place, i, infowindow, marker, description;
 	var allPlaces = control.getAllPlaces();
 	var markers = [];
 	
-	infowindow = new google.maps.InfoWindow({
-			content: description,
-			maxWidth: 275
-		});
+	
 	
 	for (i = 0; i < allPlaces.length; i++) {
 		place = allPlaces[i];
@@ -118,18 +149,6 @@ function initMap() {
 				match(placeCopy);
 			};
 		})(place));
-		
-		var node = document.createElement('li');
-		var t = document.createTextNode(place.title);
-		node.appendChild(t);
-		document.getElementById('menu').appendChild(node);
-		
-		node.addEventListener('click', (function(placeCopy) {
-			return function() {
-				control.setCurrentPlace(placeCopy);
-				match(placeCopy);
-			};
-		})(place));
 	}
 
 	function toggleBounce() {
@@ -137,7 +156,6 @@ function initMap() {
 		marker.setAnimation(null);
 	  } else {
 		marker.setAnimation(google.maps.Animation.BOUNCE);
-		
 		//Found this setTimout solution on StackOverflow by Simon Steinberger
 		//http://stackoverflow.com/questions/7339200/bounce-a-pin-in-google-maps-once
 		//http://stackoverflow.com/users/996638/simon-steinberger
@@ -161,7 +179,6 @@ function initMap() {
 				} else {
 					infowindow.setContent(x.description);
 				}
-				
 			} 
 		}
 	};	
@@ -193,8 +210,6 @@ function initMap() {
 		});
 		
 	};
-	
-	
 
 	//This solution for keeping the map centered on viewport resize comes from:
 	//http://stackoverflow.com/questions/8792676/center-google-maps-v3-on-browser-resize-responsive
@@ -213,24 +228,19 @@ function initMap() {
 		{south:35.856494, west:-84.532931, north:35.885037, east:-84.507149}
 	);
 
-};
 
-var ViewModel = function() {
-	document.getElementById('hamburger-menu').innerHTML =
-		'<button type="button" class="hamburger-button" data-bind="click: toggle">' +	
-			'<span class="horiz-bar"></span>' +
-			'<span class="horiz-bar"></span>' +
-			'<span class="horiz-bar"></span></button>';
-			
-	this.toggle=function() {
-		var e = document.getElementById('menu');
-		if (e.style.display == 'block') {
-			e.style.display = 'none';
-			} else {
-				e.style.display = 'block';
-			}
-		console.log('toggle!');
-	};
-	
-};
-ko.applyBindings(new ViewModel())
+
+*/
+
+/**
+		var node = document.createElement('li');
+		var t = document.createTextNode(place.title);
+		node.appendChild(t);
+		document.getElementById('menu').appendChild(node);
+		
+		node.addEventListener('click', (function(placeCopy) {
+			return function() {
+				control.setCurrentPlace(placeCopy);
+				match(placeCopy);
+			};
+		})(place)); */
