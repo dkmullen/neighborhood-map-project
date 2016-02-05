@@ -61,28 +61,22 @@ var model = {
 //Control
 var control = {
 	
-	getAllPlaces: function() {
-		return model.myPlaces;
-	},
-	
 	setCurrentPlace: function(place) {
 		model.currentPlace = place;
 	},
 	
 	getAllSources: function() {
 		return model.myOutsideSources;
-	}
+	},
 };
 
-
-//View
-
-var map;
+var map, infowindow;
+var markers = [];
 
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: {lat: 35.874415, lng: -84.515031},
-		zoom: 15,
+		//zoom: 15,
 		zoomControl: true,
 		zoomControlOptions: {
 			position: google.maps.ControlPosition.LEFT_CENTER
@@ -93,81 +87,82 @@ function initMap() {
 			position: google.maps.ControlPosition.LEFT_TOP
 		}
 	});	
-	var place, i, infowindow, marker, description;
-	var allPlaces = control.getAllPlaces();
-	var markers = [];
 	
+	//This solution for keeping the map centered on viewport resize comes from:
+	//http://stackoverflow.com/questions/8792676/center-google-maps-v3-on-browser-resize-responsive
+	//http://stackoverflow.com/users/127550/gregory-bolkenstijn
+	var center;
+	function calculateCenter() {
+		center = map.getCenter();
+	}
+	google.maps.event.addDomListener(map, 'idle', function() {
+		calculateCenter();
+	});
+	google.maps.event.addDomListener(window, 'resize', function() {
+		map.setCenter(center);
+	});
+	
+	map.fitBounds(
+		{south:35.856494, west:-84.532931, north:35.885037, east:-84.507149}
+	);
+	
+	initMarkers(), initInfoWindow();
+};	
+
+function initInfoWindow() {
 	infowindow = new google.maps.InfoWindow({
-			content: description,
 			maxWidth: 275
-		});
-	
-	for (i = 0; i < allPlaces.length; i++) {
-		place = allPlaces[i];
-		
+		})
+};
+
+function initMarkers() {
+	for (var i = 0; i < model.myPlaces.length; i++) {
+		this.place = model.myPlaces[i]; 		
 		marker = new google.maps.Marker({
 			animation: google.maps.Animation.DROP,
 			position: place.position,
 			map: map,
 			title: place.title	
-		});
-		markers.push(marker);
-		
+		});markers.push(marker);
 		marker.addListener('click', (function(placeCopy) {
 			return function() {
 				control.setCurrentPlace(placeCopy);
 				match(placeCopy);
 			};
 		})(place));
-		
-		var node = document.createElement('li');
-		var t = document.createTextNode(place.title);
-		node.appendChild(t);
-		document.getElementById('menu').appendChild(node);
-		
-		node.addEventListener('click', (function(placeCopy) {
-			return function() {
-				control.setCurrentPlace(placeCopy);
-				match(placeCopy);
-			};
-		})(place));
-	}
+	};
+};
 
-	function toggleBounce() {
-	  if (marker.getAnimation() !== null) {
+function match(x) {
+	for (var i = 0; i < markers.length; i++) {
+		if (markers[i].title == x.title) {
+			marker = markers[i];
+			//map.panTo({lat: (x.position.lat), lng: (x.position.lng)});
+			infowindow.open(map, marker); 
+			toggleBounce(x, marker);
+			if (x.type == 'Restaurant') {
+				getZomato(x);
+			} else {
+				infowindow.setContent(x.description);
+			}
+		} 
+	}
+};	
+
+function toggleBounce() {
+	if (marker.getAnimation() !== null) {
 		marker.setAnimation(null);
-	  } else {
+	} else {
 		marker.setAnimation(google.maps.Animation.BOUNCE);
-		
 		//Found this setTimout solution on StackOverflow by Simon Steinberger
 		//http://stackoverflow.com/questions/7339200/bounce-a-pin-in-google-maps-once
 		//http://stackoverflow.com/users/996638/simon-steinberger
 		//Makes the marker bounce once and then stop
 		setTimeout(function(){ marker.setAnimation(null); }, 750);
-	  }
-	};
-	
-	function match(x) {
-		for (var i = 0; i < markers.length; i++) {
-			if (markers[i].title == x.title) {
-				marker = markers[i];
-				
-				console.log(x.position.lat, x.position.lng);
-				map.panTo({lat: (x.position.lat), lng: (x.position.lng)});
-				//map.panTo(LatLng(x.position.lat, x.position.lng) );
-				infowindow.open(map, marker); 
-				toggleBounce(x, marker);
-				if (x.type == 'Restaurant') {
-					getZomato(x);
-				} else {
-					infowindow.setContent(x.description);
-				}
-				
-			} 
-		}
-	};	
-	
-	function getZomato(x) {
+	}
+};
+
+function getZomato(x) {
 		var allSources = control.getAllSources();
 		var currentSource = [];
 		for (var i = 0; i < allSources.length; i++) {
@@ -176,7 +171,6 @@ function initMap() {
 			}
 		}
 		var url = currentSource[0].startUrl + x.locationID + '&apikey=' + currentSource[0].key;
-		console.log(currentSource);
 			
 		$.getJSON( url, function( business ) {
 			businessStr = 
@@ -193,32 +187,14 @@ function initMap() {
 			infowindow.setContent(businessStr);
 		});
 		
-	};
-	
-	
-
-	//This solution for keeping the map centered on viewport resize comes from:
-	//http://stackoverflow.com/questions/8792676/center-google-maps-v3-on-browser-resize-responsive
-	//http://stackoverflow.com/users/127550/gregory-bolkenstijn
-	function calculateCenter() {
-		center = map.getCenter();
-	}
-	google.maps.event.addDomListener(map, 'idle', function() {
-		calculateCenter();
-	});
-	google.maps.event.addDomListener(window, 'resize', function() {
-		map.setCenter(center);
-	});
-
-	map.fitBounds(
-		{south:35.856494, west:-84.532931, north:35.885037, east:-84.507149}
-	);
-
 };
 
+//ViewModel
 function ViewModel() {
 	var self = this;
-			
+	
+	self.places = ko.observableArray(model.myPlaces);
+
 	this.toggle=function() {
 		var e = document.getElementById('menu');
 		if (e.style.display == 'block') {
@@ -227,6 +203,5 @@ function ViewModel() {
 				e.style.display = 'block';
 			}
 	};
-	
 };
-ko.applyBindings(new ViewModel())
+ko.applyBindings(new ViewModel());
