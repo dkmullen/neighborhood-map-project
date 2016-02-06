@@ -196,7 +196,7 @@ function ViewModel() {
 	self.places = ko.observableArray(model.myPlaces);
 
 	this.toggle=function() {
-		var e = document.getElementById('menu');
+		var e = document.getElementById('info-box');
 		if (e.style.display == 'block') {
 			e.style.display = 'none';
 			} else {

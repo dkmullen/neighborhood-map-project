@@ -1,6 +1,68 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/* -------------End of style reset ------------------ */
+
+
 body {
 	font-family: sans-serif;
 	margin: 0 auto;
+}
+#map {
+	height: 100vh;
+	position: relative;
+	z-index: 0;
+}
+h1 {
+	font-size: 200%;
+}
+li {
+	list-style: none;
 }
 #header {
 	position: absolute;
@@ -11,28 +73,25 @@ body {
 	background-color: rgba(64, 64, 64, 0.5);
 	color: rgb(255, 255, 255);
 }
-#map {
-	height: 100vh;
-	position: relative;
-	z-index: 0;
-}
-#menu {
+#info-box {
 	position: absolute;
 	right: 0;
 	bottom: 15px;
-	margin: 0 auto;
 	z-index: 1;
 	background-color: rgba(64, 64, 64, 0.5);
-	padding: 10px;
-	list-style: none;
-	text-align: left;
 	color: rgb(255, 255, 255);
+	padding: 15px;
+	line-height: 1.25;
 }
-#menu li {
-	line-height: 1.5;
+#menu {
 }
 #menu li:hover {
 	background-color: #000;
+}
+#search {
+	margin-top: 5px;
+	/*font-size: 100%; */
+	
 }
 .infowindow {
 	text-align: center;
@@ -41,19 +100,20 @@ body {
 #credits {
 	font-size: 80%;
 }
+
 @media (max-height:499px) {
-	#menu {
+	#info-box {
 		font-size: 85%;
 	}
 }
 @media (min-height:700px) {
-	#menu {
-		font-size: 125%;
+	#info-box {
+		font-size: 110%;
 	}
 }
 /* Makes sure the menu gets turned back on */
 @media (min-width: 500px) {
-	#menu {
+	#info-box {
 		display: block !important;
 	} 
 	.hamburger-button {
@@ -62,9 +122,9 @@ body {
 }
 @media (max-width:499px) {
 	#header {
-		font-size: 85%;
+		font-size: 65%;
 	}
-	#menu {
+	#info-box {
 		display: none;
 	}
 	.hamburger-button {

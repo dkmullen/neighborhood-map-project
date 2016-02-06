@@ -9,11 +9,16 @@
 
 <body>
 	<div id="container">
-		<div id="header"><h2>Kingston, TN USA</h2></div>
+		<div id="header"><h1>Kingston, TN USA</h1></div>
 		<div id="map"></div>
-		<ul id="menu" data-bind="foreach: places">
-			<li data-bind="text: title, click: match"></li>
-		</ul>
+		<div id="info-box">
+			<ul id="menu" data-bind="foreach: places">
+				<li data-bind="text: title, click: match"></li>
+			</ul>
+			<ul>
+				<li><input id="search" type="text" placeholder="Filter: Type restaurant, burger, museum..." size="25"></input></li></ul>
+		</div>
+		
 		<div id="hamburger-menu">
 			<button type="button" class="hamburger-button" data-bind="click: toggle">	
 				<span class="horiz-bar"></span>
