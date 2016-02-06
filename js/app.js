@@ -48,7 +48,7 @@ var model = {
 	],
 	myOutsideSources: [
 		{vendor: 'Zomato',
-			key: '',
+			key: 'xxx',
 			startUrl: 'https://developers.zomato.com/api/v2.1/restaurant?res_id='
 		},
 		{vendor: 'Yelp',
@@ -71,7 +71,7 @@ var control = {
 };
 
 var map, infowindow, currentPlaces;
-var markers = [];
+var markers = ko.observableArray([]);
 
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
@@ -124,20 +124,21 @@ function initMarkers(currentPlaces) {
 			position: place.position,
 			map: map,
 			title: place.title	
-		});markers.push(marker);
+		});
 		marker.addListener('click', (function(placeCopy) {
 			return function() {
 				control.setCurrentPlace(placeCopy);
 				match(placeCopy);
 			};
 		})(place));
+		markers.push(marker);
 	};
 };
 
 function match(x) {
-	for (var i = 0; i < markers.length; i++) {
-		if (markers[i].title == x.title) {
-			marker = markers[i];
+	for (var i = 0; i < markers().length; i++) {
+		if (markers()[i].title == x.title) {
+			marker = markers()[i];
 			//map.panTo({lat: (x.position.lat), lng: (x.position.lng)});
 			infowindow.open(map, marker); 
 			toggleBounce(x, marker);
@@ -189,7 +190,6 @@ function getZomato(x) {
 		});
 		
 };
-
 
 //ViewModel
 function ViewModel() {

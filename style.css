@@ -96,6 +96,7 @@ li {
 .infowindow {
 	text-align: center;
 	margin: 0 auto;
+	padding: 5px;
 }
 #credits {
 	font-size: 80%;
@@ -126,10 +127,11 @@ li {
 	}
 	#info-box {
 		display: none;
+		padding-right: 40px;
 	}
 	.hamburger-button {
 	  position: fixed;		
-	  right: 10px;
+	  right: 5px;
 	  bottom: 25px;
 	  z-index: 2;
 	  display: block;
