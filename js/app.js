@@ -215,10 +215,11 @@ function ViewModel() {
 				currentPlaces[i].title.toLowerCase() +  ' ' +
 				currentPlaces[i].type.toLowerCase();
 			var n = placeStr.search(result);
-			console.log(n);
-			placeArray.push(placeStr);
+			if (n !== -1) {
+				placeArray.push(currentPlaces[i]);
+			}
 		}
-		//console.log(placeArray);
+		initMarkers(placeArray); //TODO drops the right one in but doesn't erase the old
 		
 	};
 }; 
