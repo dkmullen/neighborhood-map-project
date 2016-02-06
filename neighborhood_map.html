@@ -15,8 +15,13 @@
 			<ul id="menu" data-bind="foreach: places">
 				<li data-bind="text: title, click: match"></li>
 			</ul>
-			<ul>
-				<li><input id="search" type="text" placeholder="Filter: Type restaurant, burger, museum..." size="25"></input></li></ul>
+			
+			<form data-bind="submit: filter">
+				<ul>
+					<li><input id="search" type="text" size="25" data-bind="value: filterStr"></input></li>
+				</ul>
+			</form>
+			
 		</div>
 		
 		<div id="hamburger-menu">

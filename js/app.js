@@ -4,7 +4,7 @@ var model = {
 	myPlaces: [
 		{position: {lat: 35.883324, lng: -84.523895},
 			map: map,
-			title: "Mama Mia's Restaurant-Pizzeria",
+			title: "Mama Mia's Restaurant-Pizzaria",
 			description: "Mama Mia's: Thin crust pizza and 70s decor",
 			locationID: 17269784,
 			type: 'Restaurant'
@@ -48,7 +48,7 @@ var model = {
 	],
 	myOutsideSources: [
 		{vendor: 'Zomato',
-			key: 'xxx',
+			key: '',
 			startUrl: 'https://developers.zomato.com/api/v2.1/restaurant?res_id='
 		},
 		{vendor: 'Yelp',
@@ -70,7 +70,7 @@ var control = {
 	},
 };
 
-var map, infowindow;
+var map, infowindow, currentPlaces;
 var markers = [];
 
 function initMap() {
@@ -106,7 +106,8 @@ function initMap() {
 		{south:35.856494, west:-84.532931, north:35.885037, east:-84.507149}
 	);
 	
-	initMarkers(), initInfoWindow();
+	currentPlaces = model.myPlaces;
+	initMarkers(currentPlaces), initInfoWindow();
 };	
 
 function initInfoWindow() {
@@ -115,9 +116,9 @@ function initInfoWindow() {
 		})
 };
 
-function initMarkers() {
-	for (var i = 0; i < model.myPlaces.length; i++) {
-		this.place = model.myPlaces[i]; 		
+function initMarkers(currentPlaces) {
+	for (var i = 0; i < currentPlaces.length; i++) {
+		this.place = currentPlaces[i]; 		
 		marker = new google.maps.Marker({
 			animation: google.maps.Animation.DROP,
 			position: place.position,
@@ -189,13 +190,14 @@ function getZomato(x) {
 		
 };
 
+
 //ViewModel
 function ViewModel() {
 	var self = this;
-	
 	self.places = ko.observableArray(model.myPlaces);
-
-	this.toggle=function() {
+	self.filterStr = ko.observable('');
+	
+	this.toggle = function() {
 		var e = document.getElementById('info-box');
 		if (e.style.display == 'block') {
 			e.style.display = 'none';
@@ -203,5 +205,21 @@ function ViewModel() {
 				e.style.display = 'block';
 			}
 	};
-};
+	
+	this.filter = function(filterStr) {
+		var result = this.filterStr().toLowerCase();
+		//console.log(result);
+		var placeArray = [];
+		for (var i = 0; i < currentPlaces.length; i ++) {
+			var placeStr = currentPlaces[i].description.toLowerCase() + ' ' +
+				currentPlaces[i].title.toLowerCase() +  ' ' +
+				currentPlaces[i].type.toLowerCase();
+			var n = placeStr.search(result);
+			console.log(n);
+			placeArray.push(placeStr);
+		}
+		//console.log(placeArray);
+		
+	};
+}; 
 ko.applyBindings(new ViewModel());
