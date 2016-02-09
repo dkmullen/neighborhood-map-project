@@ -8,6 +8,7 @@ var model = {
 			description: "Mama Mia's: Thin crust pizza and 70s decor",
 			locationID: 17269784,
 			type: 'Restaurant',
+			keys: 'Italian Kingston all',
 			visible: ko.observable(true)
 		},
 		{position: {lat: 35.8833019, lng: -84.52331630000003},
@@ -17,6 +18,7 @@ var model = {
 				'sports bar Kingston is likely to get.',
 			locationID: 17792245,
 			type: 'Restaurant',
+			keys: 'ribs beer barbecue Kingston all',
 			visible: ko.observable(true)
 		},
 		{position: {lat: 35.882102, lng: -84.505977},
@@ -25,6 +27,7 @@ var model = {
 			description: "Don Eduardo's: A bit salty. Water, please?",
 			locationID: 17270326,
 			type: 'Restaurant',
+			keys: 'bar tequila Kingston all',
 			visible: ko.observable(true)
 		},
 		{position: {lat: 35.875116, lng: -84.52033013105392},
@@ -33,6 +36,7 @@ var model = {
 			description: "Roane County High School: Lord of the Flies 2",
 			locationID: '',
 			type: 'School',
+			keys: 'RCHS Jackets Kingston all',
 			visible: ko.observable(true)
 		},
 		{position: {lat: 35.874415, lng: -84.515031},
@@ -41,6 +45,7 @@ var model = {
 			description: "Handee Burger: Greasy, but no spoons",
 			locationID: 17269781,
 			type: 'Restaurant',
+			keys: 'breakfast sliders Kingston all',
 			visible: ko.observable(true)
 		},
 		{position: {lat: 35.861100, lng: -84.527949},
@@ -49,6 +54,7 @@ var model = {
 			description: "Fort Southwest Point: An early American fort",
 			locationID: 'fort-southwest-point-kingston',
 			type: 'Park',
+			keys: 'museum history cannon Kingston all',
 			visible: ko.observable(true)
 		}
 	],
@@ -77,7 +83,7 @@ var control = {
 };
 
 var map, infowindow, currentPlaces;
-var markers = ko.observableArray([]);
+var markers = ko.observableArray();
 
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
@@ -209,21 +215,29 @@ function ViewModel() {
 		return self.showMenu(bool);
 	};
 	
+	this.showAll = function() {
+		for (var i = 0; i < this.places().length; i++) {
+			this.places()[i].visible(true);
+			markers()[i].setMap(map);
+		}
+	};
+	
 	this.filter = function(filterStr) {
-		
 		var result = this.filterStr().toLowerCase();
 		for (var i = 0; i < this.places().length; i++) {
 			this.places()[i].visible(true);
+			markers()[i].setMap(map);
 			var placeStr = this.places()[i].description.toLowerCase() + ' ' +
 				this.places()[i].title.toLowerCase() +  ' ' +
-				this.places()[i].type.toLowerCase();
+				this.places()[i].type.toLowerCase() +
+				this.places()[i].keys.toLowerCase();
 			var n = placeStr.search(result);
 			if (n == -1) {
 				this.places()[i].visible(false);
-				//console.log(this.places()[i]);
+				markers()[i].setMap(null);
 			}
-		}console.log(this.places());
-		//return this.places();
+		}
+		document.getElementById('search').value = '';
 	};
 }; 
 ko.applyBindings(new ViewModel());

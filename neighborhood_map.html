@@ -15,13 +15,10 @@
 			<ul id="menu" data-bind="foreach: places">
 				<li data-bind="text: title, click: match, visible: visible"></li>
 			</ul>
-			
 			<form data-bind="submit: filter">
-				<ul>
-					<li><input id="search" type="text" size="25" placeholder="Filter results with a search term" data-bind="value: filterStr"></input></li>
-				</ul>
+				<input id="search" type="text" size="25" placeholder="Filter results with a search term" data-bind="value: filterStr"></input>
 			</form>
-			
+			<button id="show" data-bind="click: showAll">Show all</button>
 		</div>
 		
 		<div id="hamburger-menu">
@@ -37,7 +34,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 	<script type='text/javascript' src="js/oauth-signature.js"></script>
 	<script type='text/javascript' src='js/knockout-3.4.0.js'></script>
-		<script src="https://maps.googleapis.com/maps/api/js?key=x&callback=initMap" async defer >
+		<script src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap" async defer >
     </script>
 	<script type='text/javascript' src="js/app.js"></script>
 	

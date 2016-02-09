@@ -90,8 +90,16 @@ li {
 }
 #search {
 	margin-top: 5px;
-	/*font-size: 100%; */
-	
+}
+#show {
+	background-color: rgb(244, 67, 54);
+	border: none;
+    color: white;
+    padding: 3px;
+    text-align: center;
+    text-decoration: none;
+	margin-top: 5px;
+
 }
 .infowindow {
 	text-align: center;
