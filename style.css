@@ -126,7 +126,7 @@ li {
 		font-size: 65%;
 	}
 	#info-box {
-		display: none;
+		/* display: none; */
 		padding-right: 40px;
 	}
 	.hamburger-button {
@@ -136,8 +136,8 @@ li {
 	  z-index: 2;
 	  display: block;
 	  padding: 7px 7px;
-	  background-color: rgb(246, 83, 72);
-	  border: 1px solid rgb(91, 20, 16);
+	  background-color: rgb(64, 64, 64);
+	  border: 1px solid rgb(255, 255, 255);
 	  border-radius: 5px;
 	}
 	.hamburger-button:focus {
@@ -148,7 +148,7 @@ li {
 	  width: 30px;
 	  height: 3px;
 	  border-radius: 1px;
-	  background-color: rgb(91, 20, 16);
+	  background-color: rgb(255, 255, 255);
 	}
 	/* Keeps the top bar from having a margin */
 	.horiz-bar + .horiz-bar {

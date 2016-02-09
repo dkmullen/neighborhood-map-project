@@ -7,7 +7,8 @@ var model = {
 			title: "Mama Mia's Restaurant-Pizzaria",
 			description: "Mama Mia's: Thin crust pizza and 70s decor",
 			locationID: 17269784,
-			type: 'Restaurant'
+			type: 'Restaurant',
+			visible: true
 		},
 		{position: {lat: 35.8833019, lng: -84.52331630000003},
 			map: map,
@@ -15,40 +16,45 @@ var model = {
 			description: 'Smokehouse Bar n Grill: The closest thing to a ' +  
 				'sports bar Kingston is likely to get.',
 			locationID: 17792245,
-			type: 'Restaurant'
+			type: 'Restaurant',
+			visible: true
 		},
 		{position: {lat: 35.882102, lng: -84.505977},
 			map: map,
 			title: "Don Eduardo's Mexican Grill",
 			description: "Don Eduardo's: A bit salty. Water, please?",
 			locationID: 17270326,
-			type: 'Restaurant'
+			type: 'Restaurant',
+			visible: true
 		},
 		{position: {lat: 35.875116, lng: -84.52033013105392},
 			map: map,
 			title: "Roane County High School",
 			description: "Roane County High School: Lord of the Flies 2",
 			locationID: '',
-			type: 'School'
+			type: 'School',
+			visible: true
 		},
 		{position: {lat: 35.874415, lng: -84.515031},
 			map: map,
 			title: "Handee Burger",
 			description: "Handee Burger: Greasy, but no spoons",
 			locationID: 17269781,
-			type: 'Restaurant'
+			type: 'Restaurant',
+			visible: true
 		},
 		{position: {lat: 35.861100, lng: -84.527949},
 			map: map,
 			title: "Fort Southwest Point",
 			description: "Fort Southwest Point: An early American fort",
 			locationID: 'fort-southwest-point-kingston',
-			type: 'Park'
+			type: 'Park',
+			visible: true
 		}
 	],
 	myOutsideSources: [
 		{vendor: 'Zomato',
-			key: 'xxx',
+			key: 'eae8f9e214a0616278ac70ef1df3dfce',
 			startUrl: 'https://developers.zomato.com/api/v2.1/restaurant?res_id='
 		},
 		{vendor: 'Yelp',
@@ -139,7 +145,7 @@ function match(x) {
 	for (var i = 0; i < markers().length; i++) {
 		if (markers()[i].title == x.title) {
 			marker = markers()[i];
-			//map.panTo({lat: (x.position.lat), lng: (x.position.lng)});
+			map.panTo({lat: (x.position.lat), lng: (x.position.lng)});
 			infowindow.open(map, marker); 
 			toggleBounce(x, marker);
 			if (x.type == 'Restaurant') {
@@ -194,33 +200,33 @@ function getZomato(x) {
 //ViewModel
 function ViewModel() {
 	var self = this;
-	self.places = ko.observableArray(model.myPlaces);
+	var bool = false;
+	var x = model.myPlaces
+	self.places = ko.observableArray(x);
 	self.filterStr = ko.observable('');
+	self.showMenu = ko.observable(bool);
 	
 	this.toggle = function() {
-		var e = document.getElementById('info-box');
-		if (e.style.display == 'block') {
-			e.style.display = 'none';
-			} else {
-				e.style.display = 'block';
-			}
+		bool = !bool;
+		return self.showMenu(bool);
 	};
 	
 	this.filter = function(filterStr) {
 		var result = this.filterStr().toLowerCase();
 		//console.log(result);
-		var placeArray = [];
-		for (var i = 0; i < currentPlaces.length; i ++) {
-			var placeStr = currentPlaces[i].description.toLowerCase() + ' ' +
-				currentPlaces[i].title.toLowerCase() +  ' ' +
-				currentPlaces[i].type.toLowerCase();
+		//var placeArray = [];
+		for (var i = 0; i < this.places().length; i++) {
+			var placeStr = this.places()[i].description.toLowerCase() + ' ' +
+				this.places()[i].title.toLowerCase() +  ' ' +
+				this.places()[i].type.toLowerCase();
+				//console.log(placeStr);
 			var n = placeStr.search(result);
-			if (n !== -1) {
-				placeArray.push(currentPlaces[i]);
+			if (n == -1) {
+				this.places()[i].visible = false;
 			}
-		}
-		initMarkers(placeArray); //TODO drops the right one in but doesn't erase the old
-		
+		}x = this.places();
+		console.log(x);
+		return self.places(x);
 	};
 }; 
 ko.applyBindings(new ViewModel());
