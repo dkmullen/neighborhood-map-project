@@ -8,7 +8,7 @@ var model = {
 			description: "Mama Mia's: Thin crust pizza and 70s decor",
 			locationID: 17269784,
 			type: 'Restaurant',
-			visible: true
+			visible: ko.observable(true)
 		},
 		{position: {lat: 35.8833019, lng: -84.52331630000003},
 			map: map,
@@ -17,7 +17,7 @@ var model = {
 				'sports bar Kingston is likely to get.',
 			locationID: 17792245,
 			type: 'Restaurant',
-			visible: true
+			visible: ko.observable(true)
 		},
 		{position: {lat: 35.882102, lng: -84.505977},
 			map: map,
@@ -25,7 +25,7 @@ var model = {
 			description: "Don Eduardo's: A bit salty. Water, please?",
 			locationID: 17270326,
 			type: 'Restaurant',
-			visible: true
+			visible: ko.observable(true)
 		},
 		{position: {lat: 35.875116, lng: -84.52033013105392},
 			map: map,
@@ -33,7 +33,7 @@ var model = {
 			description: "Roane County High School: Lord of the Flies 2",
 			locationID: '',
 			type: 'School',
-			visible: true
+			visible: ko.observable(true)
 		},
 		{position: {lat: 35.874415, lng: -84.515031},
 			map: map,
@@ -41,7 +41,7 @@ var model = {
 			description: "Handee Burger: Greasy, but no spoons",
 			locationID: 17269781,
 			type: 'Restaurant',
-			visible: true
+			visible: ko.observable(true)
 		},
 		{position: {lat: 35.861100, lng: -84.527949},
 			map: map,
@@ -49,12 +49,12 @@ var model = {
 			description: "Fort Southwest Point: An early American fort",
 			locationID: 'fort-southwest-point-kingston',
 			type: 'Park',
-			visible: true
+			visible: ko.observable(true)
 		}
 	],
 	myOutsideSources: [
 		{vendor: 'Zomato',
-			key: 'eae8f9e214a0616278ac70ef1df3dfce',
+			key: '',
 			startUrl: 'https://developers.zomato.com/api/v2.1/restaurant?res_id='
 		},
 		{vendor: 'Yelp',
@@ -171,38 +171,36 @@ function toggleBounce() {
 };
 
 function getZomato(x) {
-		var allSources = control.getAllSources();
-		var currentSource = [];
-		for (var i = 0; i < allSources.length; i++) {
-			if (allSources[i].vendor == 'Zomato') {
-				currentSource.push(allSources[i]);
-			}
+	var allSources = control.getAllSources();
+	var currentSource = [];
+	for (var i = 0; i < allSources.length; i++) {
+		if (allSources[i].vendor == 'Zomato') {
+			currentSource.push(allSources[i]);
 		}
-		var url = currentSource[0].startUrl + x.locationID + '&apikey=' + currentSource[0].key;
-			
-		$.getJSON( url, function( business ) {
-			businessStr = 
-			'<div class="infowindow"><h3>' + business.name + '</h3>' +
-			'<p>' + business.location.address + '<br>' +
-			'<strong>Cuisine:</strong> ' + business.cuisines + '<br>' +
-			'<strong>Average Cost for Two:</strong> $' + business.average_cost_for_two + '</br>' +
-			'<strong>Average Zomato Rating:</strong> ' + business.user_rating.aggregate_rating +
-				' (' + business.user_rating.rating_text + ')</p>' +
-			'<p id="credits"><a href="' + business.url + '" target="new">Powered by Zomato</a></p><div>';
-			if (business.thumb !== 'https://b.zmtcdn.com/images/res_avatar_120_1x_new.png') {
-				businessStr = businessStr + '<div class=infowindow><p><img src="' + business.thumb +'"></p></div>';
-			}
-			infowindow.setContent(businessStr);
-		});
+	}
+	var url = currentSource[0].startUrl + x.locationID + '&apikey=' + currentSource[0].key;
 		
+	$.getJSON( url, function( business ) {
+		businessStr = 
+		'<div class="infowindow"><h3>' + business.name + '</h3>' +
+		'<p>' + business.location.address + '<br>' +
+		'<strong>Cuisine:</strong> ' + business.cuisines + '<br>' +
+		'<strong>Average Cost for Two:</strong> $' + business.average_cost_for_two + '</br>' +
+		'<strong>Average Zomato Rating:</strong> ' + business.user_rating.aggregate_rating +
+			' (' + business.user_rating.rating_text + ')</p>' +
+		'<p id="credits"><a href="' + business.url + '" target="new">Powered by Zomato</a></p><div>';
+		if (business.thumb !== 'https://b.zmtcdn.com/images/res_avatar_120_1x_new.png') {
+			businessStr = businessStr + '<div class=infowindow><p><img src="' + business.thumb +'"></p></div>';
+		}
+		infowindow.setContent(businessStr);
+	});
 };
 
 //ViewModel
 function ViewModel() {
 	var self = this;
 	var bool = false;
-	var x = model.myPlaces
-	self.places = ko.observableArray(x);
+	self.places = ko.observableArray(model.myPlaces);
 	self.filterStr = ko.observable('');
 	self.showMenu = ko.observable(bool);
 	
@@ -212,21 +210,20 @@ function ViewModel() {
 	};
 	
 	this.filter = function(filterStr) {
+		
 		var result = this.filterStr().toLowerCase();
-		//console.log(result);
-		//var placeArray = [];
 		for (var i = 0; i < this.places().length; i++) {
+			this.places()[i].visible(true);
 			var placeStr = this.places()[i].description.toLowerCase() + ' ' +
 				this.places()[i].title.toLowerCase() +  ' ' +
 				this.places()[i].type.toLowerCase();
-				//console.log(placeStr);
 			var n = placeStr.search(result);
 			if (n == -1) {
-				this.places()[i].visible = false;
+				this.places()[i].visible(false);
+				//console.log(this.places()[i]);
 			}
-		}x = this.places();
-		console.log(x);
-		return self.places(x);
+		}console.log(this.places());
+		//return this.places();
 	};
 }; 
 ko.applyBindings(new ViewModel());
