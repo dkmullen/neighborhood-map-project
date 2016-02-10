@@ -4,11 +4,11 @@ var model = {
 	myPlaces: [
 		{position: {lat: 35.883324, lng: -84.523895},
 			map: map,
-			title: "Mama Mia's Restaurant-Pizzaria",
+			title: "Mama Mia's Restaurant-Pizzeria",
 			description: "Mama Mia's: Thin crust pizza and 70s decor",
 			locationID: 17269784,
 			type: 'Restaurant',
-			keys: 'Italian Kingston all',
+			keys: 'pizza Italian Kingston all',
 			visible: ko.observable(true)
 		},
 		{position: {lat: 35.8833019, lng: -84.52331630000003},
@@ -27,7 +27,7 @@ var model = {
 			description: "Don Eduardo's: A bit salty. Water, please?",
 			locationID: 17270326,
 			type: 'Restaurant',
-			keys: 'bar tequila Kingston all',
+			keys: 'bar tequila beer Kingston all',
 			visible: ko.observable(true)
 		},
 		{position: {lat: 35.875116, lng: -84.52033013105392},
@@ -223,6 +223,7 @@ function ViewModel() {
 	};
 	
 	this.filter = function(filterStr) {
+		var counter = 0;
 		var result = this.filterStr().toLowerCase();
 		for (var i = 0; i < this.places().length; i++) {
 			this.places()[i].visible(true);
@@ -236,8 +237,12 @@ function ViewModel() {
 				this.places()[i].visible(false);
 				markers()[i].setMap(null);
 			}
+			counter += n;
 		}
 		document.getElementById('search').value = '';
+		if (counter == (-1 * this.places().length)) {
+			console.log("hi");
+		}
 	};
 }; 
 ko.applyBindings(new ViewModel());

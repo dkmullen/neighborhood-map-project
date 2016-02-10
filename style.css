@@ -82,24 +82,37 @@ li {
 	color: rgb(255, 255, 255);
 	padding: 15px;
 	line-height: 1.25;
+	width: 275px;
 }
 #menu {
 }
 #menu li:hover {
 	background-color: #000;
 }
+#filter {
+	display: inline-block;
+}
 #search {
 	margin-top: 5px;
 }
 #show {
-	background-color: rgb(244, 67, 54);
+	background-color: transparent;
+	background-image: url(refresh.png);
 	border: none;
-    color: white;
     padding: 3px;
-    text-align: center;
-    text-decoration: none;
 	margin-top: 5px;
-
+	height: 22px;
+	width: 25px;
+	display: inline-block;
+}
+#submit {
+	background-color: transparent;
+	background-image: url(checkmark.png);
+	border: none;
+    padding: 3px;
+	margin-top: 5px;
+	height: 22px;
+	width: 25px;
 }
 .infowindow {
 	text-align: center;
@@ -153,7 +166,7 @@ li {
 	}
 	.hamburger-button .horiz-bar {
 	  display: block;
-	  width: 30px;
+	  width: 22px;
 	  height: 3px;
 	  border-radius: 1px;
 	  background-color: rgb(255, 255, 255);
