@@ -93,7 +93,7 @@ li {
 	display: inline-block;
 }
 #search {
-	margin-top: 5px;
+	margin-bottom: 10px;
 }
 #show {
 	background-color: transparent;
@@ -114,6 +114,13 @@ li {
 	height: 22px;
 	width: 25px;
 }
+#no-matches {
+	font-size: 70%;
+	position: absolute;
+	bottom: 4px;
+	right: 192px;
+	color: rgb(255, 204, 0);
+}
 .infowindow {
 	text-align: center;
 	margin: 0 auto;
@@ -124,12 +131,12 @@ li {
 }
 
 @media (max-height:499px) {
-	#info-box {
+	#menu {
 		font-size: 85%;
 	}
 }
 @media (min-height:700px) {
-	#info-box {
+	#menu {
 		font-size: 110%;
 	}
 }
@@ -153,7 +160,7 @@ li {
 	.hamburger-button {
 	  position: fixed;		
 	  right: 5px;
-	  bottom: 25px;
+	  bottom: 35px;
 	  z-index: 2;
 	  display: block;
 	  padding: 7px 7px;
@@ -174,5 +181,8 @@ li {
 	/* Keeps the top bar from having a margin */
 	.horiz-bar + .horiz-bar {
 		margin-top: 6px;
+	}
+	#no-matches {
+		right: 215px;
 	}
 }

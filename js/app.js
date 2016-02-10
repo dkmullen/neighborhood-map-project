@@ -209,6 +209,7 @@ function ViewModel() {
 	self.places = ko.observableArray(model.myPlaces);
 	self.filterStr = ko.observable('');
 	self.showMenu = ko.observable(bool);
+	self.noMatches = ko.observable();
 	
 	this.toggle = function() {
 		bool = !bool;
@@ -222,7 +223,12 @@ function ViewModel() {
 		}
 	};
 	
+	this.setNoMatches = function() {
+		this.noMatches(false);
+	};
+	
 	this.filter = function(filterStr) {
+		this.setNoMatches();
 		var counter = 0;
 		var result = this.filterStr().toLowerCase();
 		for (var i = 0; i < this.places().length; i++) {
@@ -241,7 +247,8 @@ function ViewModel() {
 		}
 		document.getElementById('search').value = '';
 		if (counter == (-1 * this.places().length)) {
-			console.log("hi");
+			this.noMatches(true);
+			this.showAll();
 		}
 	};
 }; 
