@@ -7,7 +7,8 @@ var model = {
 			title: "Mama Mia's Restaurant-Pizzeria",
 			description: "Mama Mia's: Thin crust pizza and 70s decor",
 			locationID: 17269784,
-			type: 'Restaurant',
+			source: 'Zomato',
+			type: 'Restaurant',			
 			keys: 'pizza Italian Kingston all',
 			visible: ko.observable(true)
 		},
@@ -17,6 +18,7 @@ var model = {
 			description: 'Smokehouse Bar n Grill: The closest thing to a ' +  
 				'sports bar Kingston is likely to get.',
 			locationID: 17792245,
+			source: 'Zomato',
 			type: 'Restaurant',
 			keys: 'ribs beer barbecue Kingston all',
 			visible: ko.observable(true)
@@ -26,17 +28,19 @@ var model = {
 			title: "Don Eduardo's Mexican Grill",
 			description: "Don Eduardo's: A bit salty. Water, please?",
 			locationID: 17270326,
+			source: 'Zomato',
 			type: 'Restaurant',
 			keys: 'bar tequila beer Kingston all',
 			visible: ko.observable(true)
 		},
-		{position: {lat: 35.875116, lng: -84.52033013105392},
+		{position: {lat: 35.877760, lng: -84.511819},
 			map: map,
-			title: "Roane County High School",
-			description: "Roane County High School: Lord of the Flies 2",
-			locationID: '',
-			type: 'School',
-			keys: 'RCHS Jackets Kingston all',
+			title: "Mei Wei",
+			description: "Mei Wei: Far East food in Near East Tennessee",
+			locationID: '17269786',
+			source: 'Zomato',
+			type: 'Restaurant',
+			keys: 'Chinese Asian ',
 			visible: ko.observable(true)
 		},
 		{position: {lat: 35.874415, lng: -84.515031},
@@ -44,6 +48,7 @@ var model = {
 			title: "Handee Burger",
 			description: "Handee Burger: Greasy, but no spoons",
 			locationID: 17269781,
+			source: 'Zomato',
 			type: 'Restaurant',
 			keys: 'breakfast sliders Kingston all',
 			visible: ko.observable(true)
@@ -53,14 +58,25 @@ var model = {
 			title: "Fort Southwest Point",
 			description: "Fort Southwest Point: An early American fort",
 			locationID: 'fort-southwest-point-kingston',
+			source: 'Yelp',
 			type: 'Park',
 			keys: 'museum history cannon Kingston all',
+			visible: ko.observable(true)
+		},
+		{position: {lat: 35.870925, lng: -84.515573},
+			map: map,
+			title: "Kingston Barber Shop",
+			description: "Kingston Barber Shop: A great place for your Elvis-related looks",
+			locationID: 'kingston-barber-shop-kingston-3',
+			source: 'Yelp',
+			type: 'Barber',
+			keys: 'barber haircut trim Kingston all',
 			visible: ko.observable(true)
 		}
 	],
 	myOutsideSources: [
 		{vendor: 'Zomato',
-			key: '',
+			key: 'eae8f9e214a0616278ac70ef1df3dfce',
 			startUrl: 'https://developers.zomato.com/api/v2.1/restaurant?res_id='
 		},
 		{vendor: 'Yelp',
@@ -154,7 +170,7 @@ function match(x) {
 			map.panTo({lat: (x.position.lat), lng: (x.position.lng)});
 			infowindow.open(map, marker); 
 			toggleBounce(x, marker);
-			if (x.type == 'Restaurant') {
+			if (x.source == 'Zomato') {
 				getZomato(x);
 			} else {
 				infowindow.setContent(x.description);
