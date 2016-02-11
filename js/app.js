@@ -76,7 +76,7 @@ var model = {
 	],
 	myOutsideSources: [
 		{vendor: 'Zomato',
-			key: 'eae8f9e214a0616278ac70ef1df3dfce',
+			key: '',
 			startUrl: 'https://developers.zomato.com/api/v2.1/restaurant?res_id='
 		},
 		{vendor: 'Yelp',
