@@ -76,15 +76,15 @@ var model = {
 	],
 	myOutsideSources: [
 		{vendor: 'Zomato',
-			key: 'xxx',
+			key: '',
 			startUrl: 'https://developers.zomato.com/api/v2.1/restaurant?res_id='
 		},
 		{vendor: 'Yelp',
 			key: {
-				oauth_consumer_key : 'xxx',
-				oauth_token : 'xxx',
-				consumerSecret: 'xxx',
-				tokenSecret: 'xxx'
+				oauth_consumer_key : '',
+				oauth_token : '',
+				consumerSecret: '',
+				tokenSecret: ''
 			},
 			startUrl: 'https://api.yelp.com/v2/business/'
 		}
@@ -106,7 +106,6 @@ var control = {
 		return vendorData;
 	}
 };
-
 //Section for dealing with Zomato
 function getZomato(x) {
 	this.vendorData = control.getVendor('Zomato')
@@ -138,20 +137,20 @@ function makeid() {
     return text;
 };
 
-function getYelp(locationID) {
+function getYelp(x) {
 	this.vendorData = control.getVendor('Yelp')
 	var httpMethod = 'GET',
-		yelpUrl = vendorData.startUrl + locationID,
+		yelpUrl = vendorData[0].startUrl + x.locationID,
 		parameters = {
-			oauth_consumer_key : vendorData.key.oauth_consumer_key,
-			oauth_token : vendorData.key.oauth_token,
+			oauth_consumer_key : this.vendorData[0].key.oauth_consumer_key,
+			oauth_token : this.vendorData[0].key.oauth_token,
 			oauth_nonce : makeid(),
 			oauth_timestamp : Math.round((new Date()).getTime() / 1000.0),
 			oauth_signature_method : 'HMAC-SHA1',
 			oauth_version : '1.0'
 		},
-		consumerSecret = vendorData.key.consumerSecret,
-		tokenSecret = vendorData.key.tokenSecret,
+		consumerSecret = vendorData[0].key.consumerSecret,
+		tokenSecret = vendorData[0].key.tokenSecret,
 		// generates a RFC 3986 encoded, BASE64 encoded HMAC-SHA1 hash
 		encodedSignature = oauthSignature.generate(httpMethod, yelpUrl, parameters, consumerSecret, tokenSecret),
 		// generates a BASE64 encode HMAC-SHA1 hash
@@ -174,8 +173,7 @@ function getYelp(locationID) {
 			'<strong>Rating:</strong> ' + business.rating + '</p>' +
 			'<p id="credits"><a href="' + business.url + '" target="new">Visit our Yelp Page</a></p>' +
 			'<img src="' + business.image_url + '"><div>'; 
-			document.getElementById('yelp').innerHTML = businessStr;
-			console.log(businessStr);
+			infowindow.setContent(businessStr);
 		});
 };	
 
@@ -254,8 +252,9 @@ function match(x) {
 			toggleBounce(x, marker);
 			if (x.source == 'Zomato') {
 				getZomato(x);
-			} else {
-				infowindow.setContent(x.description);
+			} 
+			else if (x.source == 'Yelp') {
+				getYelp(x);
 			}
 		} 
 	}
@@ -273,8 +272,6 @@ function toggleBounce() {
 		setTimeout(function(){ marker.setAnimation(null); }, 750);
 	}
 };
-
-
 
 //ViewModel
 function ViewModel() {
