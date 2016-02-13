@@ -7,7 +7,8 @@ var model = {
 			title: "Mama Mia's Restaurant-Pizzeria",
 			description: "Mama Mia's: Thin crust pizza and 70s decor",
 			locationID: 17269784,
-			type: 'Restaurant',
+			source: 'Zomato',
+			type: 'Restaurant',			
 			keys: 'pizza Italian Kingston all',
 			visible: ko.observable(true)
 		},
@@ -17,6 +18,7 @@ var model = {
 			description: 'Smokehouse Bar n Grill: The closest thing to a ' +  
 				'sports bar Kingston is likely to get.',
 			locationID: 17792245,
+			source: 'Zomato',
 			type: 'Restaurant',
 			keys: 'ribs beer barbecue Kingston all',
 			visible: ko.observable(true)
@@ -26,17 +28,19 @@ var model = {
 			title: "Don Eduardo's Mexican Grill",
 			description: "Don Eduardo's: A bit salty. Water, please?",
 			locationID: 17270326,
+			source: 'Zomato',
 			type: 'Restaurant',
 			keys: 'bar tequila beer Kingston all',
 			visible: ko.observable(true)
 		},
-		{position: {lat: 35.875116, lng: -84.52033013105392},
+		{position: {lat: 35.877760, lng: -84.511819},
 			map: map,
-			title: "Roane County High School",
-			description: "Roane County High School: Lord of the Flies 2",
-			locationID: '',
-			type: 'School',
-			keys: 'RCHS Jackets Kingston all',
+			title: "Mei Wei",
+			description: "Mei Wei: Far East food in Near East Tennessee",
+			locationID: '17269786',
+			source: 'Zomato',
+			type: 'Restaurant',
+			keys: 'Chinese Asian ',
 			visible: ko.observable(true)
 		},
 		{position: {lat: 35.874415, lng: -84.515031},
@@ -44,6 +48,7 @@ var model = {
 			title: "Handee Burger",
 			description: "Handee Burger: Greasy, but no spoons",
 			locationID: 17269781,
+			source: 'Zomato',
 			type: 'Restaurant',
 			keys: 'breakfast sliders Kingston all',
 			visible: ko.observable(true)
@@ -53,18 +58,34 @@ var model = {
 			title: "Fort Southwest Point",
 			description: "Fort Southwest Point: An early American fort",
 			locationID: 'fort-southwest-point-kingston',
+			source: 'Yelp',
 			type: 'Park',
 			keys: 'museum history cannon Kingston all',
+			visible: ko.observable(true)
+		},
+		{position: {lat: 35.870925, lng: -84.515573},
+			map: map,
+			title: "Kingston Barber Shop",
+			description: "Kingston Barber Shop: A great place for your Elvis-related looks",
+			locationID: 'kingston-barber-shop-kingston-3',
+			source: 'Yelp',
+			type: 'Barber',
+			keys: 'barber haircut trim Kingston all',
 			visible: ko.observable(true)
 		}
 	],
 	myOutsideSources: [
 		{vendor: 'Zomato',
-			key: '',
+			key: 'xxx',
 			startUrl: 'https://developers.zomato.com/api/v2.1/restaurant?res_id='
 		},
 		{vendor: 'Yelp',
-			key: {},
+			key: {
+				oauth_consumer_key : 'xxx',
+				oauth_token : 'xxx',
+				consumerSecret: 'xxx',
+				tokenSecret: 'xxx'
+			},
 			startUrl: 'https://api.yelp.com/v2/business/'
 		}
 	]
@@ -72,16 +93,93 @@ var model = {
 
 //Control
 var control = {
-	
 	setCurrentPlace: function(place) {
 		model.currentPlace = place;
 	},
-	
-	getAllSources: function() {
-		return model.myOutsideSources;
-	},
+	getVendor: function(vendor){
+		var vendorData = [];
+		for (var i = 0; i < model.myOutsideSources.length; i++) {
+			if (model.myOutsideSources[i].vendor == vendor) {
+				vendorData.push(model.myOutsideSources[i]);
+			}
+		}
+		return vendorData;
+	}
 };
 
+//Section for dealing with Zomato
+function getZomato(x) {
+	this.vendorData = control.getVendor('Zomato')
+	var url = this.vendorData[0].startUrl + x.locationID + '&apikey=' + this.vendorData[0].key;
+	console.log(url);
+		
+	$.getJSON( url, function( business ) {
+		businessStr = 
+		'<div class="infowindow"><h3>' + business.name + '</h3>' +
+		'<p>' + business.location.address + '<br>' +
+		'<strong>Cuisine:</strong> ' + business.cuisines + '<br>' +
+		'<strong>Average Cost for Two:</strong> $' + business.average_cost_for_two + '</br>' +
+		'<strong>Average Zomato Rating:</strong> ' + business.user_rating.aggregate_rating +
+			' (' + business.user_rating.rating_text + ')</p>' +
+		'<p id="credits"><a href="' + business.url + '" target="new">Powered by Zomato</a></p><div>';
+		if (business.thumb !== 'https://b.zmtcdn.com/images/res_avatar_120_1x_new.png') {
+			businessStr = businessStr + '<div class=infowindow><p><img src="' + business.thumb +'"></p></div>';
+		}
+		infowindow.setContent(businessStr);
+	});
+};
+
+//Section for dealing with Yelp
+function makeid() {
+    var text = "";
+    var possible = "0123456789";
+    for( var i=0; i < 9; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    return text;
+};
+
+function getYelp(locationID) {
+	this.vendorData = control.getVendor('Yelp')
+	var httpMethod = 'GET',
+		yelpUrl = vendorData.startUrl + locationID,
+		parameters = {
+			oauth_consumer_key : vendorData.key.oauth_consumer_key,
+			oauth_token : vendorData.key.oauth_token,
+			oauth_nonce : makeid(),
+			oauth_timestamp : Math.round((new Date()).getTime() / 1000.0),
+			oauth_signature_method : 'HMAC-SHA1',
+			oauth_version : '1.0'
+		},
+		consumerSecret = vendorData.key.consumerSecret,
+		tokenSecret = vendorData.key.tokenSecret,
+		// generates a RFC 3986 encoded, BASE64 encoded HMAC-SHA1 hash
+		encodedSignature = oauthSignature.generate(httpMethod, yelpUrl, parameters, consumerSecret, tokenSecret),
+		// generates a BASE64 encode HMAC-SHA1 hash
+		signature = oauthSignature.generate(httpMethod, yelpUrl, parameters, consumerSecret, tokenSecret,
+			{ encodeSignature: false});
+
+	var newUrl = yelpUrl + '?oauth_consumer_key=' + 
+		parameters.oauth_consumer_key + '&oauth_nonce=' + parameters.oauth_nonce +
+		'&oauth_signature_method=' + parameters.oauth_signature_method + 
+		'&oauth_timestamp=' + parameters.oauth_timestamp + '&oauth_token=' 
+		+ parameters.oauth_token + '&oauth_version=' + parameters.oauth_version +
+		'&oauth_signature=' + signature;
+
+	$.getJSON( newUrl, function( business ) {
+			businessStr = 
+			'<div class="infowindow"><h3>' + business.name + '</h3>' +
+			'<p>' + business.location.display_address + '<br>' +
+			'Phone: ' + business.display_phone + '<br>' +
+			'<img src="' + business.rating_img_url +'"><br>' +
+			'<strong>Rating:</strong> ' + business.rating + '</p>' +
+			'<p id="credits"><a href="' + business.url + '" target="new">Visit our Yelp Page</a></p>' +
+			'<img src="' + business.image_url + '"><div>'; 
+			document.getElementById('yelp').innerHTML = businessStr;
+			console.log(businessStr);
+		});
+};	
+
+//Init Google Map, etc.
 var map, infowindow, currentPlaces;
 var markers = ko.observableArray();
 
@@ -154,7 +252,7 @@ function match(x) {
 			map.panTo({lat: (x.position.lat), lng: (x.position.lng)});
 			infowindow.open(map, marker); 
 			toggleBounce(x, marker);
-			if (x.type == 'Restaurant') {
+			if (x.source == 'Zomato') {
 				getZomato(x);
 			} else {
 				infowindow.setContent(x.description);
@@ -176,31 +274,7 @@ function toggleBounce() {
 	}
 };
 
-function getZomato(x) {
-	var allSources = control.getAllSources();
-	var currentSource = [];
-	for (var i = 0; i < allSources.length; i++) {
-		if (allSources[i].vendor == 'Zomato') {
-			currentSource.push(allSources[i]);
-		}
-	}
-	var url = currentSource[0].startUrl + x.locationID + '&apikey=' + currentSource[0].key;
-		
-	$.getJSON( url, function( business ) {
-		businessStr = 
-		'<div class="infowindow"><h3>' + business.name + '</h3>' +
-		'<p>' + business.location.address + '<br>' +
-		'<strong>Cuisine:</strong> ' + business.cuisines + '<br>' +
-		'<strong>Average Cost for Two:</strong> $' + business.average_cost_for_two + '</br>' +
-		'<strong>Average Zomato Rating:</strong> ' + business.user_rating.aggregate_rating +
-			' (' + business.user_rating.rating_text + ')</p>' +
-		'<p id="credits"><a href="' + business.url + '" target="new">Powered by Zomato</a></p><div>';
-		if (business.thumb !== 'https://b.zmtcdn.com/images/res_avatar_120_1x_new.png') {
-			businessStr = businessStr + '<div class=infowindow><p><img src="' + business.thumb +'"></p></div>';
-		}
-		infowindow.setContent(businessStr);
-	});
-};
+
 
 //ViewModel
 function ViewModel() {
