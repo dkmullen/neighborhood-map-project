@@ -108,24 +108,31 @@ var control = {
 };
 //Section for dealing with Zomato
 function getZomato(x) {
+	var businessStr;
 	this.vendorData = control.getVendor('Zomato')
 	var url = this.vendorData[0].startUrl + x.locationID + '&apikey=' + this.vendorData[0].key;
 	console.log(url);
 		
 	$.getJSON( url, function( business ) {
 		businessStr = 
-		'<div class="infowindow"><h3>' + business.name + '</h3>' +
-		'<p>' + business.location.address + '<br>' +
-		'<strong>Cuisine:</strong> ' + business.cuisines + '<br>' +
-		'<strong>Average Cost for Two:</strong> $' + business.average_cost_for_two + '</br>' +
-		'<strong>Average Zomato Rating:</strong> ' + business.user_rating.aggregate_rating +
-			' (' + business.user_rating.rating_text + ')</p>' +
-		'<p id="credits"><a href="' + business.url + '" target="new">Powered by Zomato</a></p><div>';
+			'<div class="infowindow"><h3>' + business.name + '</h3>' +
+			'<p>' + business.location.address + '<br>' +
+			'<strong>Cuisine:</strong> ' + business.cuisines + '<br>' +
+			'<strong>Average Cost for Two:</strong> $' + business.average_cost_for_two + '</br>' +
+			'<strong>Average Zomato Rating:</strong> ' + business.user_rating.aggregate_rating +
+				' (' + business.user_rating.rating_text + ')</p>' +
+			'<p id="credits"><a href="' + business.url + '" target="new">Powered by Zomato</a></p><div>';
 		if (business.thumb !== 'https://b.zmtcdn.com/images/res_avatar_120_1x_new.png') {
 			businessStr = businessStr + '<div class=infowindow><p><img src="' + business.thumb +'"></p></div>';
 		}
+		
+	})
+	.done(function() {
 		infowindow.setContent(businessStr);
-	});
+	})
+	.fail(function() {
+			infowindow.setContent(x.description);
+	})
 };
 
 //Section for dealing with Yelp
@@ -138,6 +145,7 @@ function makeid() {
 };
 
 function getYelp(x) {
+	var businessStr;
 	this.vendorData = control.getVendor('Yelp')
 	var httpMethod = 'GET',
 		yelpUrl = vendorData[0].startUrl + x.locationID,
@@ -163,9 +171,9 @@ function getYelp(x) {
 		'&oauth_timestamp=' + parameters.oauth_timestamp + '&oauth_token=' 
 		+ parameters.oauth_token + '&oauth_version=' + parameters.oauth_version +
 		'&oauth_signature=' + signature;
-
+		
 	$.getJSON( newUrl, function( business ) {
-			businessStr = 
+		businessStr = 
 			'<div class="infowindow"><h3>' + business.name + '</h3>' +
 			'<p>' + business.location.display_address + '<br>' +
 			'Phone: ' + business.display_phone + '<br>' +
@@ -173,8 +181,14 @@ function getYelp(x) {
 			'<strong>Rating:</strong> ' + business.rating + '</p>' +
 			'<p id="credits"><a href="' + business.url + '" target="new">Visit our Yelp Page</a></p>' +
 			'<img src="' + business.image_url + '"><div>'; 
-			infowindow.setContent(businessStr);
-		});
+		
+	})	
+	.done(function() {
+		infowindow.setContent(businessStr);
+	})
+	.fail(function() {
+		infowindow.setContent(x.description);
+	})
 };	
 
 //Init Google Map, etc.
