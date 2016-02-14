@@ -76,7 +76,7 @@ var model = {
 	],
 	myOutsideSources: [
 		{vendor: 'Zomato',
-			key: '',
+			key: 'eae8f9e214a0616278ac70ef1df3dfce',
 			startUrl: 'https://developers.zomato.com/api/v2.1/restaurant?res_id='
 		},
 		{vendor: 'Yelp',
@@ -111,7 +111,6 @@ function getZomato(x) {
 	var businessStr;
 	this.vendorData = control.getVendor('Zomato')
 	var url = this.vendorData[0].startUrl + x.locationID + '&apikey=' + this.vendorData[0].key;
-	console.log(url);
 		
 	$.getJSON( url, function( business ) {
 		businessStr = 
@@ -155,7 +154,8 @@ function getYelp(x) {
 			oauth_nonce : makeid(),
 			oauth_timestamp : Math.round((new Date()).getTime() / 1000.0),
 			oauth_signature_method : 'HMAC-SHA1',
-			oauth_version : '1.0'
+			oauth_version : '1.0',
+			callback: 'cb'
 		},
 		consumerSecret = vendorData[0].key.consumerSecret,
 		tokenSecret = vendorData[0].key.tokenSecret,
@@ -170,10 +170,16 @@ function getYelp(x) {
 		'&oauth_signature_method=' + parameters.oauth_signature_method + 
 		'&oauth_timestamp=' + parameters.oauth_timestamp + '&oauth_token=' 
 		+ parameters.oauth_token + '&oauth_version=' + parameters.oauth_version +
-		'&oauth_signature=' + signature;
-		
-	$.getJSON( newUrl, function( business ) {
-		businessStr = 
+		'&oauth_signature=' + encodedSignature;
+	
+	$.ajax({
+		type: "GET",
+		url: newUrl,
+		cache: true,
+		jsonpCallback: 'cb',
+		dataType: "jsonp",
+		success: function ( business ) {
+			businessStr = 
 			'<div class="infowindow"><h3>' + business.name + '</h3>' +
 			'<p>' + business.location.display_address + '<br>' +
 			'Phone: ' + business.display_phone + '<br>' +
@@ -181,7 +187,7 @@ function getYelp(x) {
 			'<strong>Rating:</strong> ' + business.rating + '</p>' +
 			'<p id="credits"><a href="' + business.url + '" target="new">Visit our Yelp Page</a></p>' +
 			'<img src="' + business.image_url + '"><div>'; 
-		
+		}
 	})	
 	.done(function() {
 		infowindow.setContent(businessStr);
@@ -334,6 +340,7 @@ function ViewModel() {
 		if (counter == (-1 * this.places().length)) {
 			this.noMatches(true);
 			this.showAll();
+			//setTimeout(this.setNoMatches, 3000);
 		}
 	};
 }; 
