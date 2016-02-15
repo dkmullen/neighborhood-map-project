@@ -76,7 +76,7 @@ var model = {
 	],
 	myOutsideSources: [
 		{vendor: 'Zomato',
-			key: 'eae8f9e214a0616278ac70ef1df3dfce',
+			key: '',
 			startUrl: 'https://developers.zomato.com/api/v2.1/restaurant?res_id='
 		},
 		{vendor: 'Yelp',
@@ -185,7 +185,7 @@ function getYelp(x) {
 			'Phone: ' + business.display_phone + '<br>' +
 			'<img src="' + business.rating_img_url +'"><br>' +
 			'<strong>Rating:</strong> ' + business.rating + '</p>' +
-			'<p id="credits"><a href="' + business.url + '" target="new">Visit our Yelp Page</a></p>' +
+			'<p id="credits"><a href="' + business.url + '" target="new">Visit our Yelp Page</a></p><br>' +
 			'<img src="' + business.image_url + '"><div>'; 
 		}
 	})	
@@ -308,18 +308,15 @@ function ViewModel() {
 	};
 	
 	this.showAll = function() {
+		this.noMatches(false);
 		for (var i = 0; i < this.places().length; i++) {
 			this.places()[i].visible(true);
 			markers()[i].setMap(map);
 		}
 	};
-	
-	this.setNoMatches = function() {
-		this.noMatches(false);
-	};
-	
+
 	this.filter = function(filterStr) {
-		this.setNoMatches();
+		this.noMatches(false);
 		var counter = 0;
 		var result = this.filterStr().toLowerCase();
 		for (var i = 0; i < this.places().length; i++) {
@@ -338,9 +335,9 @@ function ViewModel() {
 		}
 		document.getElementById('search').value = '';
 		if (counter == (-1 * this.places().length)) {
-			this.noMatches(true);
 			this.showAll();
-			//setTimeout(this.setNoMatches, 3000);
+			this.noMatches(true);
+			
 		}
 	};
 }; 

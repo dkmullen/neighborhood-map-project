@@ -69,7 +69,9 @@ li {
 	z-index: 1;
 	right: 0;
 	top: 10px;
-	padding: 0 10px 0 10px;
+	padding: 10px;
+	text-align: right;
+	line-height: 1.25;
 	background-color: rgba(64, 64, 64, 0.5);
 	color: rgb(255, 255, 255);
 }
@@ -150,8 +152,8 @@ li {
 	}
 }
 @media (max-width:499px) {
-	#header {
-		font-size: 65%;
+	#header h1{
+		font-size: 150%;
 	}
 	#info-box {
 		/* display: none; */
@@ -186,3 +188,7 @@ li {
 		right: 215px;
 	}
 }
+@media (max-width:399px) {
+	#header h1{
+		font-size: 130%;
+	}
