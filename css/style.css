@@ -99,7 +99,7 @@ li {
 }
 #show {
 	background-color: transparent;
-	background-image: url(refresh.png);
+	background-image: url(pix/refresh.png);
 	border: none;
     padding: 3px;
 	margin-top: 5px;
@@ -109,7 +109,7 @@ li {
 }
 #submit {
 	background-color: transparent;
-	background-image: url(checkmark.png);
+	background-image: url(pix/checkmark.png);
 	border: none;
     padding: 3px;
 	margin-top: 5px;
