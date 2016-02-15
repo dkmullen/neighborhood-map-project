@@ -20,7 +20,7 @@ var model = {
 			locationID: 17792245,
 			source: 'Zomato',
 			type: 'Restaurant',
-			keys: 'ribs beer barbecue Kingston all',
+			keys: 'ribs beer barbecue burger fries music karaoke Kingston all',
 			visible: ko.observable(true)
 		},
 		{position: {lat: 35.882102, lng: -84.505977},
@@ -35,12 +35,12 @@ var model = {
 		},
 		{position: {lat: 35.877760, lng: -84.511819},
 			map: map,
-			title: "Mei Wei",
+			title: "Mei Wei Chinese Restaurant",
 			description: "Mei Wei: Far East food in Near East Tennessee",
 			locationID: '17269786',
 			source: 'Zomato',
 			type: 'Restaurant',
-			keys: 'Chinese Asian ',
+			keys: 'Chinese Asian Kingston all',
 			visible: ko.observable(true)
 		},
 		{position: {lat: 35.874415, lng: -84.515031},
@@ -50,7 +50,7 @@ var model = {
 			locationID: 17269781,
 			source: 'Zomato',
 			type: 'Restaurant',
-			keys: 'breakfast sliders Kingston all',
+			keys: 'breakfast biscuits gravy sliders Kingston all',
 			visible: ko.observable(true)
 		},
 		{position: {lat: 35.861100, lng: -84.527949},
@@ -333,11 +333,11 @@ function ViewModel() {
 			}
 			counter += n;
 		}
-		document.getElementById('search').value = '';
+		document.getElementById('filter').reset();
+		this.filterStr('');
 		if (counter == (-1 * this.places().length)) {
 			this.showAll();
 			this.noMatches(true);
-			
 		}
 	};
 }; 
