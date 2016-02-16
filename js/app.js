@@ -9,8 +9,7 @@ var Model = {
 			locationID: 17269784,
 			source: 'Zomato',
 			type: 'Restaurant',			
-			keys: 'pizza Italian Kingston all',
-			visible: ko.observable(true)
+			keys: 'pizza Italian Kingston all'
 		},
 		{position: {lat: 35.8833019, lng: -84.52331630000003},
 			map: map,
@@ -20,8 +19,7 @@ var Model = {
 			locationID: 17792245,
 			source: 'Zomato',
 			type: 'Restaurant',
-			keys: 'ribs beer barbecue burger fries music karaoke Kingston all',
-			visible: ko.observable(true)
+			keys: 'ribs beer barbecue burger fries music karaoke Kingston all'
 		},
 		{position: {lat: 35.882102, lng: -84.505977},
 			map: map,
@@ -30,8 +28,7 @@ var Model = {
 			locationID: 17270326,
 			source: 'Zomato',
 			type: 'Restaurant',
-			keys: 'bar tequila beer Kingston all',
-			visible: ko.observable(true)
+			keys: 'bar tequila beer Kingston all'
 		},
 		{position: {lat: 35.877760, lng: -84.511819},
 			map: map,
@@ -40,8 +37,7 @@ var Model = {
 			locationID: '17269786',
 			source: 'Zomato',
 			type: 'Restaurant',
-			keys: 'Chinese Asian Kingston all',
-			visible: ko.observable(true)
+			keys: 'Chinese Asian Kingston all'
 		},
 		{position: {lat: 35.874415, lng: -84.515031},
 			map: map,
@@ -50,8 +46,7 @@ var Model = {
 			locationID: 17269781,
 			source: 'Zomato',
 			type: 'Restaurant',
-			keys: 'breakfast biscuits gravy sliders Kingston all',
-			visible: ko.observable(true)
+			keys: 'breakfast biscuits gravy sliders Kingston all'
 		},
 		{position: {lat: 35.861100, lng: -84.527949},
 			map: map,
@@ -60,8 +55,7 @@ var Model = {
 			locationID: 'fort-southwest-point-kingston',
 			source: 'Yelp',
 			type: 'Park',
-			keys: 'museum history cannon Kingston all',
-			visible: ko.observable(true)
+			keys: 'museum history cannon Kingston all'
 		},
 		{position: {lat: 35.870925, lng: -84.515573},
 			map: map,
@@ -71,8 +65,7 @@ var Model = {
 			locationID: 'kingston-barber-shop-kingston-3',
 			source: 'Yelp',
 			type: 'Barber',
-			keys: 'barber haircut trim Kingston all',
-			visible: ko.observable(true)
+			keys: 'barber haircut trim Kingston all'
 		}
 	],
 	myVendors: [
@@ -92,7 +85,7 @@ var Model = {
 	]
 };
 
-/** Control: Communicates directly with the Model */
+/** Control: Functions that communicate directly with the Model */
 var Control = {
 	setCurrentPlace: function(place) {
 		Model.currentPlace = place;
@@ -110,7 +103,12 @@ var Control = {
 		return vendorData;
 	}
 };
-/** Function for retrieving data from Zomato, formatting it for infowindow */
+/** Function for retrieving data from Zomato, formatting it for infowindow 
+ *  If Zomato's 'business thumb' is their placeholder image, ignore it.
+ *  The non-descriptive variable 'x' is used throughout to refer to one thing
+ *  and only one: The item that the user just clicked on.
+ *  @function
+ */
 function getZomato(x) {
 	var businessStr;
 	this.vendorData = Control.getVendor('Zomato');
@@ -138,24 +136,37 @@ function getZomato(x) {
 	.done(function() {
 		infowindow.setContent(businessStr);
 	})
+	/** Fills infowidow with hard-coded description upon fail */
 	.fail(function() {
-			infowindow.setContent(x.description);
+		infowindow.setContent(x.description);
 	});
-};
+}
 
-/** Function for retrieving data from Yelp, formatting it for infowindow */
+/** Function for retrieving data from Yelp, formatting it for infowindow
+ *  @function
+ */
 function getYelp(x) {
 	var businessStr;
 	this.vendorData = Control.getVendor('Yelp');
-	
+
+/** The makeid function (modified slightly by me) comes from csharptest.net
+  * http://stackoverflow.com/questions/1349404/generate-a-string-of-5-random
+		-characters-in-javascript/1349426#1349426
+  * http://stackoverflow.com/users/164392/csharptest-net
+  */	
 	function makeid() {
 		var text = "";
 		var possible = "0123456789";
-		for( var i=0; i < 9; i++ )
+		for (var i = 0; i < 9; i++) {
 			text += possible.charAt(Math.floor(Math.random() * possible.length));
+		}
 		return text;
-	};
-	
+	}
+
+/** The method below for generating an oauth signature is from Marco Bettiolo
+  * (with my data added) and requires his oauth-signature.js
+  * https://github.com/bettiolo/oauth-signature-js
+  */
 	var httpMethod = 'GET',
 		yelpUrl = vendorData[0].startUrl + x.locationID,
 		parameters = {
@@ -175,6 +186,7 @@ function getYelp(x) {
 		// generates a BASE64 encode HMAC-SHA1 hash
 		signature = oauthSignature.generate(httpMethod, yelpUrl, parameters, 
 			consumerSecret, tokenSecret, { encodeSignature: false});
+/** --------------End of Marco Bettiolo's code ---------------- */
 
 	var newUrl = yelpUrl + '?oauth_consumer_key=' + 
 		parameters.oauth_consumer_key + '&oauth_nonce=' + 
@@ -205,19 +217,20 @@ function getYelp(x) {
 	.done(function() {
 		infowindow.setContent(businessStr);
 	})
+	/** Fills infowidow with hard-coded description upon fail */
 	.fail(function() {
 		infowindow.setContent(x.description);
 	});
-};	
+}
 
 /** Init Google Map, etc. */
 var map, infowindow, allPlaces;
 var markers = ko.observableArray();
 
+/** Structure supplied by Google's API. I moved the controls around a bit */
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: {lat: 35.874415, lng: -84.515031},
-		//zoom: 15,
 		zoomControl: true,
 		zoomControlOptions: {
 			position: google.maps.ControlPosition.LEFT_CENTER
@@ -229,9 +242,10 @@ function initMap() {
 		}
 	});	
 	
-//This solution for keeping the map centered on viewport resize comes from:
-//http://stackoverflow.com/questions/8792676/center-google-maps-v3-on-browser-resize-responsive
-//http://stackoverflow.com/users/127550/gregory-bolkenstijn
+/** This solution for keeping the map centered on viewport resize comes from:
+  * http://stackoverflow.com/questions/8792676/center-google-maps-v3-on-
+	browser-resize-responsive
+  * http://stackoverflow.com/users/127550/gregory-bolkenstijn */
 	var center;
 	function calculateCenter() {
 		center = map.getCenter();
@@ -250,13 +264,13 @@ function initMap() {
 	allPlaces = Control.getAllPlaces();
 	initMarkers(allPlaces);
 	initInfoWindow();
-};	
+}
 
 function initInfoWindow() {
 	infowindow = new google.maps.InfoWindow({
 			maxWidth: 275
 		});
-};
+}
 
 function initMarkers(allPlaces) {
 	for (var i = 0; i < allPlaces.length; i++) {
@@ -267,6 +281,7 @@ function initMarkers(allPlaces) {
 			map: map,
 			title: place.title	
 		});
+		/** Records which marker is clicked, passes it to the two functions*/
 		marker.addListener('click', (function(placeCopy) {
 			return function() {
 				Control.setCurrentPlace(placeCopy);
@@ -274,9 +289,14 @@ function initMarkers(allPlaces) {
 			};
 		})(place));
 		markers.push(marker);
-	};
-};
+	}
+}
 
+/** Function that links the clicked marker's title with the correct marker in
+ *  the markers array to correctly position the infowindow. Also pans the map
+ *  to center on that marker, then calls Zomato or Yelp
+ *  @function
+ */
 function match(x) {
 	for (var i = 0; i < markers().length; i++) {
 		if (markers()[i].title == x.title) {
@@ -292,35 +312,45 @@ function match(x) {
 			}
 		} 
 	}
-};	
+}
 
+/** Function from Google to make a clicked marker bounce */
 function toggleBounce() {
 	if (marker.getAnimation() !== null) {
 		marker.setAnimation(null);
 	} else {
 		marker.setAnimation(google.maps.Animation.BOUNCE);
-		//Found this setTimout solution on StackOverflow by Simon Steinberger
-		//http://stackoverflow.com/questions/7339200/bounce-a-pin-in-google-maps-once
-		//http://stackoverflow.com/users/996638/simon-steinberger
-		//Makes the marker bounce once and then stop
+/** This setTimout solution is from Simon Steinberger
+  * Makes the marker bounce once and then stop
+  * http://stackoverflow.com/questions/7339200/bounce-a-pin-in-google-maps-once
+  * http://stackoverflow.com/users/996638/simon-steinberger */
 		setTimeout(function(){ marker.setAnimation(null); }, 750);
 	}
-};
+}
 
-//ViewModel
+/** ViewModel */
 function ViewModel() {
 	var self = this;
 	var bool = false;
-	self.places = ko.observableArray(Control.getAllPlaces());
 	self.filterStr = ko.observable('');
 	self.showMenu = ko.observable(bool);
 	self.noMatches = ko.observable();
 	
+	var allPlaces = Control.getAllPlaces();
+	for (var i = 0; i < allPlaces.length; i ++) {
+		/** Adds the visible ko.observable to each place */
+		allPlaces[i].visible = ko.observable(true);
+	}
+	self.places = ko.observableArray(allPlaces);
+	
+	/** Flips the boolean in the showMenu observable, toggling the menu on a
+	 *  mobile device */
 	this.toggle = function() {
 		bool = !bool;
 		return self.showMenu(bool);
 	};
 	
+	/* */
 	this.showAll = function() {
 		this.noMatches(false);
 		for (var i = 0; i < this.places().length; i++) {
@@ -354,5 +384,5 @@ function ViewModel() {
 			this.noMatches(true);
 		}
 	};
-}; 
+}
 ko.applyBindings(new ViewModel());
