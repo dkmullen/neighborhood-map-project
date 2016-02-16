@@ -61,6 +61,12 @@ body {
 h1 {
 	font-size: 200%;
 }
+h3 {
+	font-size: 125%;
+} 
+strong {
+	font-weight: 700;
+}
 li {
 	list-style: none;
 }

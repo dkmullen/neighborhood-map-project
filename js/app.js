@@ -1,11 +1,11 @@
-//Model
-var model = {
+/** The Data Model: Would normally be called from a server */
+var Model = {
 	currentPlace: null,
 	myPlaces: [
 		{position: {lat: 35.883324, lng: -84.523895},
 			map: map,
-			title: "Mama Mia's Restaurant-Pizzeria",
-			description: "Mama Mia's: Thin crust pizza and 70s decor",
+			title: 'Mama Mia\'s Restaurant-Pizzeria',
+			description: 'Mama Mia\'s: Thin crust pizza and 70s decor',
 			locationID: 17269784,
 			source: 'Zomato',
 			type: 'Restaurant',			
@@ -14,7 +14,7 @@ var model = {
 		},
 		{position: {lat: 35.8833019, lng: -84.52331630000003},
 			map: map,
-			title: "Smokehouse Bar n Grill",
+			title: 'Smokehouse Bar n Grill',
 			description: 'Smokehouse Bar n Grill: The closest thing to a ' +  
 				'sports bar Kingston is likely to get.',
 			locationID: 17792245,
@@ -25,8 +25,8 @@ var model = {
 		},
 		{position: {lat: 35.882102, lng: -84.505977},
 			map: map,
-			title: "Don Eduardo's Mexican Grill",
-			description: "Don Eduardo's: A bit salty. Water, please?",
+			title: 'Don Eduardo\'s Mexican Grill',
+			description: 'Don Eduardo\'s: A bit salty. Water, please?',
 			locationID: 17270326,
 			source: 'Zomato',
 			type: 'Restaurant',
@@ -35,8 +35,8 @@ var model = {
 		},
 		{position: {lat: 35.877760, lng: -84.511819},
 			map: map,
-			title: "Mei Wei Chinese Restaurant",
-			description: "Mei Wei: Far East food in Near East Tennessee",
+			title: 'Mei Wei Chinese Restaurant',
+			description: 'Mei Wei: Far East food in Near East Tennessee',
 			locationID: '17269786',
 			source: 'Zomato',
 			type: 'Restaurant',
@@ -45,8 +45,8 @@ var model = {
 		},
 		{position: {lat: 35.874415, lng: -84.515031},
 			map: map,
-			title: "Handee Burger",
-			description: "Handee Burger: Greasy, but no spoons",
+			title: 'Handee Burger',
+			description: 'Handee Burger: Greasy, but no spoons',
 			locationID: 17269781,
 			source: 'Zomato',
 			type: 'Restaurant',
@@ -55,8 +55,8 @@ var model = {
 		},
 		{position: {lat: 35.861100, lng: -84.527949},
 			map: map,
-			title: "Fort Southwest Point",
-			description: "Fort Southwest Point: An early American fort",
+			title: 'Fort Southwest Point',
+			description: 'Fort Southwest Point: An early American fort',
 			locationID: 'fort-southwest-point-kingston',
 			source: 'Yelp',
 			type: 'Park',
@@ -65,8 +65,9 @@ var model = {
 		},
 		{position: {lat: 35.870925, lng: -84.515573},
 			map: map,
-			title: "Kingston Barber Shop",
-			description: "Kingston Barber Shop: A great place for your Elvis-related looks",
+			title: 'Kingston Barber Shop',
+			description: 'Kingston Barber Shop: A great place for your' +
+			'Elvis-related looks',
 			locationID: 'kingston-barber-shop-kingston-3',
 			source: 'Yelp',
 			type: 'Barber',
@@ -74,7 +75,7 @@ var model = {
 			visible: ko.observable(true)
 		}
 	],
-	myOutsideSources: [
+	myVendors: [
 		{vendor: 'Zomato',
 			key: '',
 			startUrl: 'https://developers.zomato.com/api/v2.1/restaurant?res_id='
@@ -91,61 +92,70 @@ var model = {
 	]
 };
 
-//Control
-var control = {
+/** Control: Communicates directly with the Model */
+var Control = {
 	setCurrentPlace: function(place) {
-		model.currentPlace = place;
+		Model.currentPlace = place;
+	},
+	getAllPlaces: function() {
+		return Model.myPlaces;
 	},
 	getVendor: function(vendor){
 		var vendorData = [];
-		for (var i = 0; i < model.myOutsideSources.length; i++) {
-			if (model.myOutsideSources[i].vendor == vendor) {
-				vendorData.push(model.myOutsideSources[i]);
+		for (var i = 0; i < Model.myVendors.length; i++) {
+			if (Model.myVendors[i].vendor == vendor) {
+				vendorData.push(Model.myVendors[i]);
 			}
 		}
 		return vendorData;
 	}
 };
-//Section for dealing with Zomato
+/** Function for retrieving data from Zomato, formatting it for infowindow */
 function getZomato(x) {
 	var businessStr;
-	this.vendorData = control.getVendor('Zomato')
-	var url = this.vendorData[0].startUrl + x.locationID + '&apikey=' + this.vendorData[0].key;
+	this.vendorData = Control.getVendor('Zomato');
+	var url = this.vendorData[0].startUrl + x.locationID + '&apikey=' + 
+		this.vendorData[0].key;
 		
 	$.getJSON( url, function( business ) {
 		businessStr = 
 			'<div class="infowindow"><h3>' + business.name + '</h3>' +
-			'<p>' + business.location.address + '<br>' +
+			'<p>' + business.location.address + '<br>' + 
 			'<strong>Cuisine:</strong> ' + business.cuisines + '<br>' +
-			'<strong>Average Cost for Two:</strong> $' + business.average_cost_for_two + '</br>' +
-			'<strong>Average Zomato Rating:</strong> ' + business.user_rating.aggregate_rating +
-				' (' + business.user_rating.rating_text + ')</p>' +
-			'<p id="credits"><a href="' + business.url + '" target="new">Powered by Zomato</a></p><div>';
-		if (business.thumb !== 'https://b.zmtcdn.com/images/res_avatar_120_1x_new.png') {
-			businessStr = businessStr + '<div class=infowindow><p><img src="' + business.thumb +'"></p></div>';
+			'<strong>Average Cost for Two:</strong> $' + 
+			business.average_cost_for_two + '</br>' +
+			'<strong>Average Zomato Rating:</strong> ' + 
+			business.user_rating.aggregate_rating + ' (' + 
+			business.user_rating.rating_text + ')</p>' +
+			'<p id="credits"><a href="' + business.url + 
+			'" target="new">Powered by Zomato</a></p><div>';
+		if (business.thumb !== 
+			'https://b.zmtcdn.com/images/res_avatar_120_1x_new.png') {
+			businessStr = businessStr + '<div class=infowindow><p><img src="' + 
+			business.thumb +'"></p></div>';
 		}
-		
 	})
 	.done(function() {
 		infowindow.setContent(businessStr);
 	})
 	.fail(function() {
 			infowindow.setContent(x.description);
-	})
+	});
 };
 
-//Section for dealing with Yelp
-function makeid() {
-    var text = "";
-    var possible = "0123456789";
-    for( var i=0; i < 9; i++ )
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-    return text;
-};
-
+/** Function for retrieving data from Yelp, formatting it for infowindow */
 function getYelp(x) {
 	var businessStr;
-	this.vendorData = control.getVendor('Yelp')
+	this.vendorData = Control.getVendor('Yelp');
+	
+	function makeid() {
+		var text = "";
+		var possible = "0123456789";
+		for( var i=0; i < 9; i++ )
+			text += possible.charAt(Math.floor(Math.random() * possible.length));
+		return text;
+	};
+	
 	var httpMethod = 'GET',
 		yelpUrl = vendorData[0].startUrl + x.locationID,
 		parameters = {
@@ -160,17 +170,19 @@ function getYelp(x) {
 		consumerSecret = vendorData[0].key.consumerSecret,
 		tokenSecret = vendorData[0].key.tokenSecret,
 		// generates a RFC 3986 encoded, BASE64 encoded HMAC-SHA1 hash
-		encodedSignature = oauthSignature.generate(httpMethod, yelpUrl, parameters, consumerSecret, tokenSecret),
+		encodedSignature = oauthSignature.generate(httpMethod, yelpUrl, 
+			parameters, consumerSecret, tokenSecret),
 		// generates a BASE64 encode HMAC-SHA1 hash
-		signature = oauthSignature.generate(httpMethod, yelpUrl, parameters, consumerSecret, tokenSecret,
-			{ encodeSignature: false});
+		signature = oauthSignature.generate(httpMethod, yelpUrl, parameters, 
+			consumerSecret, tokenSecret, { encodeSignature: false});
 
 	var newUrl = yelpUrl + '?oauth_consumer_key=' + 
-		parameters.oauth_consumer_key + '&oauth_nonce=' + parameters.oauth_nonce +
-		'&oauth_signature_method=' + parameters.oauth_signature_method + 
-		'&oauth_timestamp=' + parameters.oauth_timestamp + '&oauth_token=' 
-		+ parameters.oauth_token + '&oauth_version=' + parameters.oauth_version +
-		'&oauth_signature=' + encodedSignature;
+		parameters.oauth_consumer_key + '&oauth_nonce=' + 
+		parameters.oauth_nonce + '&oauth_signature_method=' + 
+		parameters.oauth_signature_method + '&oauth_timestamp=' + 
+		parameters.oauth_timestamp + '&oauth_token=' +
+		parameters.oauth_token + '&oauth_version=' + 
+		parameters.oauth_version + '&oauth_signature=' + encodedSignature;
 	
 	$.ajax({
 		type: "GET",
@@ -185,7 +197,8 @@ function getYelp(x) {
 			'Phone: ' + business.display_phone + '<br>' +
 			'<img src="' + business.rating_img_url +'"><br>' +
 			'<strong>Rating:</strong> ' + business.rating + '</p>' +
-			'<p id="credits"><a href="' + business.url + '" target="new">Visit our Yelp Page</a></p><br>' +
+			'<p id="credits"><a href="' + business.url + 
+			'" target="new">Visit our Yelp Page</a></p><br>' +
 			'<img src="' + business.image_url + '"><div>'; 
 		}
 	})	
@@ -194,11 +207,11 @@ function getYelp(x) {
 	})
 	.fail(function() {
 		infowindow.setContent(x.description);
-	})
+	});
 };	
 
-//Init Google Map, etc.
-var map, infowindow, currentPlaces;
+/** Init Google Map, etc. */
+var map, infowindow, allPlaces;
 var markers = ko.observableArray();
 
 function initMap() {
@@ -216,9 +229,9 @@ function initMap() {
 		}
 	});	
 	
-	//This solution for keeping the map centered on viewport resize comes from:
-	//http://stackoverflow.com/questions/8792676/center-google-maps-v3-on-browser-resize-responsive
-	//http://stackoverflow.com/users/127550/gregory-bolkenstijn
+//This solution for keeping the map centered on viewport resize comes from:
+//http://stackoverflow.com/questions/8792676/center-google-maps-v3-on-browser-resize-responsive
+//http://stackoverflow.com/users/127550/gregory-bolkenstijn
 	var center;
 	function calculateCenter() {
 		center = map.getCenter();
@@ -234,19 +247,20 @@ function initMap() {
 		{south:35.856494, west:-84.532931, north:35.885037, east:-84.507149}
 	);
 	
-	currentPlaces = model.myPlaces;
-	initMarkers(currentPlaces), initInfoWindow();
+	allPlaces = Control.getAllPlaces();
+	initMarkers(allPlaces);
+	initInfoWindow();
 };	
 
 function initInfoWindow() {
 	infowindow = new google.maps.InfoWindow({
 			maxWidth: 275
-		})
+		});
 };
 
-function initMarkers(currentPlaces) {
-	for (var i = 0; i < currentPlaces.length; i++) {
-		this.place = currentPlaces[i]; 		
+function initMarkers(allPlaces) {
+	for (var i = 0; i < allPlaces.length; i++) {
+		this.place = allPlaces[i]; 		
 		marker = new google.maps.Marker({
 			animation: google.maps.Animation.DROP,
 			position: place.position,
@@ -255,7 +269,7 @@ function initMarkers(currentPlaces) {
 		});
 		marker.addListener('click', (function(placeCopy) {
 			return function() {
-				control.setCurrentPlace(placeCopy);
+				Control.setCurrentPlace(placeCopy);
 				match(placeCopy);
 			};
 		})(place));
@@ -297,7 +311,7 @@ function toggleBounce() {
 function ViewModel() {
 	var self = this;
 	var bool = false;
-	self.places = ko.observableArray(model.myPlaces);
+	self.places = ko.observableArray(Control.getAllPlaces());
 	self.filterStr = ko.observable('');
 	self.showMenu = ko.observable(bool);
 	self.noMatches = ko.observable();
