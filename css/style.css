@@ -1,4 +1,5 @@
-/* http://meyerweb.com/eric/tools/css/reset/ 
+/* Reset CSS styles
+   http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
 */
@@ -48,7 +49,6 @@ table {
 }
 /* -------------End of style reset ------------------ */
 
-
 body {
 	font-family: sans-serif;
 	margin: 0 auto;
@@ -81,6 +81,7 @@ li {
 	background-color: rgba(64, 64, 64, 0.5);
 	color: rgb(255, 255, 255);
 }
+/* The info-box is the container of the nav menu */
 #info-box {
 	position: absolute;
 	right: 0;
@@ -92,8 +93,6 @@ li {
 	line-height: 1.25;
 	width: 275px;
 }
-#menu {
-}
 #menu li:hover {
 	background-color: #000;
 }
@@ -102,6 +101,15 @@ li {
 }
 #search {
 	margin-bottom: 10px;
+}
+#submit {
+	background-color: transparent;
+	background-image: url(../pix/checkmark.png);
+	border: none;
+    padding: 3px;
+	margin-top: 5px;
+	height: 22px;
+	width: 25px;
 }
 #show {
 	background-color: transparent;
@@ -113,15 +121,6 @@ li {
 	width: 25px;
 	display: inline-block;
 }
-#submit {
-	background-color: transparent;
-	background-image: url(../pix/checkmark.png);
-	border: none;
-    padding: 3px;
-	margin-top: 5px;
-	height: 22px;
-	width: 25px;
-}
 #no-matches {
 	font-size: 70%;
 	position: absolute;
@@ -129,12 +128,13 @@ li {
 	right: 192px;
 	color: rgb(255, 204, 0);
 }
+/* Styles the infowindow Google Maps creates */
 .infowindow {
 	text-align: center;
 	margin: 0 auto;
 	padding: 5px;
 }
-#credits {
+.infowindow #credits {
 	font-size: 80%;
 }
 
@@ -186,7 +186,7 @@ li {
 	  border-radius: 1px;
 	  background-color: rgb(255, 255, 255);
 	}
-	/* Keeps the top bar from having a margin */
+	/* Keeps the top bar in hamburger-button from having a margin */
 	.horiz-bar + .horiz-bar {
 		margin-top: 6px;
 	}

@@ -9,7 +9,8 @@ var Model = {
 			locationID: 17269784,
 			source: 'Zomato',
 			type: 'Restaurant',			
-			keys: 'pizza Italian Kingston all'
+			keys: 'pizza Italian Kingston all',
+			icon: 'pizza.png'
 		},
 		{position: {lat: 35.8833019, lng: -84.52331630000003},
 			map: map,
@@ -19,7 +20,8 @@ var Model = {
 			locationID: 17792245,
 			source: 'Zomato',
 			type: 'Restaurant',
-			keys: 'ribs beer barbecue burger fries music karaoke Kingston all'
+			keys: 'ribs beer barbecue burger fries music karaoke Kingston all',
+			icon: 'hamburger.png'
 		},
 		{position: {lat: 35.882102, lng: -84.505977},
 			map: map,
@@ -28,7 +30,8 @@ var Model = {
 			locationID: 17270326,
 			source: 'Zomato',
 			type: 'Restaurant',
-			keys: 'bar tequila beer Kingston all'
+			keys: 'bar tequila beer Kingston all',
+			icon: 'hamburger.png'
 		},
 		{position: {lat: 35.877760, lng: -84.511819},
 			map: map,
@@ -37,7 +40,8 @@ var Model = {
 			locationID: '17269786',
 			source: 'Zomato',
 			type: 'Restaurant',
-			keys: 'Chinese Asian Kingston all'
+			keys: 'Chinese Asian Kingston all',
+			icon: 'hamburger.png'
 		},
 		{position: {lat: 35.874415, lng: -84.515031},
 			map: map,
@@ -46,7 +50,8 @@ var Model = {
 			locationID: 17269781,
 			source: 'Zomato',
 			type: 'Restaurant',
-			keys: 'breakfast biscuits gravy sliders Kingston all'
+			keys: 'breakfast biscuits gravy sliders Kingston all',
+			icon: 'hamburger.png'
 		},
 		{position: {lat: 35.861100, lng: -84.527949},
 			map: map,
@@ -55,7 +60,8 @@ var Model = {
 			locationID: 'fort-southwest-point-kingston',
 			source: 'Yelp',
 			type: 'Park',
-			keys: 'museum history cannon Kingston all'
+			keys: 'museum history cannon Kingston all',
+			icon: 'heart.png'
 		},
 		{position: {lat: 35.870925, lng: -84.515573},
 			map: map,
@@ -65,7 +71,8 @@ var Model = {
 			locationID: 'kingston-barber-shop-kingston-3',
 			source: 'Yelp',
 			type: 'Barber',
-			keys: 'barber haircut trim Kingston all'
+			keys: 'barber haircut trim Kingston all',
+			icon: 'Scissors.png'
 		}
 	],
 	myVendors: [
@@ -103,8 +110,8 @@ var Control = {
 		return vendorData;
 	}
 };
+
 /** Function for retrieving data from Zomato, formatting it for infowindow 
- *  If Zomato's 'business thumb' is their placeholder image, ignore it.
  *  The non-descriptive variable 'x' is used throughout to refer to one thing
  *  and only one: The item that the user just clicked on.
  *  @function
@@ -127,6 +134,7 @@ function getZomato(x) {
 			business.user_rating.rating_text + ')</p>' +
 			'<p id="credits"><a href="' + business.url + 
 			'" target="new">Powered by Zomato</a></p><div>';
+		/**  If Zomato's 'business thumb' is their placeholder, ignore it. */
 		if (business.thumb !== 
 			'https://b.zmtcdn.com/images/res_avatar_120_1x_new.png') {
 			businessStr = businessStr + '<div class=infowindow><p><img src="' + 
@@ -274,11 +282,13 @@ function initInfoWindow() {
 
 function initMarkers(allPlaces) {
 	for (var i = 0; i < allPlaces.length; i++) {
-		this.place = allPlaces[i]; 		
+		this.place = allPlaces[i]; 
+		var image = './pix/' + place.icon;
 		marker = new google.maps.Marker({
 			animation: google.maps.Animation.DROP,
 			position: place.position,
 			map: map,
+			icon: image,
 			title: place.title	
 		});
 		/** Records which marker is clicked, passes it to the two functions*/
@@ -350,15 +360,20 @@ function ViewModel() {
 		return self.showMenu(bool);
 	};
 	
-	/* */
+	/* Refreshes the menu to show all items after filter has removed some */
 	this.showAll = function() {
+		/** Turns off the no matches messagge */
 		this.noMatches(false);
+		/** Makes all the menu items visible, resets each marker */
 		for (var i = 0; i < this.places().length; i++) {
 			this.places()[i].visible(true);
 			markers()[i].setMap(map);
 		}
 	};
-
+	/** A function that takes an input string, searches each location's title,
+	 *  description, type (ie restaurant, museum) and list of key words*
+	 *  @function
+	 */
 	this.filter = function(filterStr) {
 		this.noMatches(false);
 		var counter = 0;
@@ -370,15 +385,27 @@ function ViewModel() {
 				this.places()[i].title.toLowerCase() +  ' ' +
 				this.places()[i].type.toLowerCase() +
 				this.places()[i].keys.toLowerCase();
+			/** Looks for result (the lowercase version of user input in 
+			 *  placeStr (the lowercase version of all the place data) */
 			var n = placeStr.search(result);
+			/** -1 indicates no match, so cooresponding menu items and markers
+			 *  are hidden */
 			if (n == -1) {
 				this.places()[i].visible(false);
 				markers()[i].setMap(null);
 			}
+			/** Counter keeps a running total of all the locations where
+			 *  matches were found. This sum isn't important except if it
+			 *  ends up as -1 each time through the loop */
 			counter += n;
 		}
+		/** The next two lines reset the search form and empty the string
+		 *  just to keep things tidy */
 		document.getElementById('filter').reset();
 		this.filterStr('');
+		/** Determines if counter was -1 each time through the loop, which 
+		 *  means no matches were found. Then it shows the whole menu and
+		 *  makes visible the no matches message */
 		if (counter == (-1 * this.places().length)) {
 			this.showAll();
 			this.noMatches(true);
