@@ -2,7 +2,7 @@
 var Model = {
 	currentPlace: null,
 	myPlaces: [
-		{position: {lat: 35.883324, lng: -84.523895},
+		{position: {lat: 35.883324, lng: -84.524148},
 			map: map,
 			title: 'Mama Mia\'s Restaurant-Pizzeria',
 			description: 'Mama Mia\'s: Thin crust pizza and 70s decor',
@@ -12,16 +12,15 @@ var Model = {
 			keys: 'pizza Italian Kingston all',
 			icon: 'pizza.png'
 		},
-		{position: {lat: 35.8833019, lng: -84.52331630000003},
+		{position: {lat: 35.885723, lng: -84.497461},
 			map: map,
-			title: 'Smokehouse Bar n Grill',
-			description: 'Smokehouse Bar n Grill: The closest thing to a ' +  
-				'sports bar Kingston is likely to get.',
-			locationID: 17792245,
-			source: 'Zomato',
+			title: 'Gloria Jean\'s Restaurant',
+			description: 'Gloria Jean\'s: Southern cooking and hospitality',  
+			locationID: 'gloria-jeans-kingston',
+			source: 'Yelp',
 			type: 'Restaurant',
-			keys: 'ribs beer barbecue burger fries music karaoke Kingston all',
-			icon: 'hamburger.png'
+			keys: 'burgers sandwiches southern pie Kingston all',
+			icon: 'dinner.png'
 		},
 		{position: {lat: 35.882102, lng: -84.505977},
 			map: map,
@@ -31,7 +30,7 @@ var Model = {
 			source: 'Zomato',
 			type: 'Restaurant',
 			keys: 'bar tequila beer Kingston all',
-			icon: 'hamburger.png'
+			icon: 'dinner.png'
 		},
 		{position: {lat: 35.877760, lng: -84.511819},
 			map: map,
@@ -41,7 +40,7 @@ var Model = {
 			source: 'Zomato',
 			type: 'Restaurant',
 			keys: 'Chinese Asian Kingston all',
-			icon: 'hamburger.png'
+			icon: 'dinner.png'
 		},
 		{position: {lat: 35.874415, lng: -84.515031},
 			map: map,
@@ -61,7 +60,7 @@ var Model = {
 			source: 'Yelp',
 			type: 'Park',
 			keys: 'museum history cannon Kingston all',
-			icon: 'heart.png'
+			icon: 'cannon.png'
 		},
 		{position: {lat: 35.870925, lng: -84.515573},
 			map: map,
@@ -72,7 +71,7 @@ var Model = {
 			source: 'Yelp',
 			type: 'Barber',
 			keys: 'barber haircut trim Kingston all',
-			icon: 'Scissors.png'
+			icon: 'barber.png'
 		}
 	],
 	myVendors: [
@@ -266,7 +265,7 @@ function initMap() {
 	});
 	
 	map.fitBounds(
-		{south:35.856494, west:-84.532931, north:35.885037, east:-84.507149}
+		{south:35.856494, west:-84.528388, north:35.886037, east:-84.507149}
 	);
 	
 	allPlaces = Control.getAllPlaces();
