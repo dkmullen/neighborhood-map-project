@@ -198,3 +198,54 @@ li {
 	#header h1{
 		font-size: 130%;
 	}
+}
+
+/* CSS for about-box */
+
+.row {
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+}
+.col-1 {
+	width: 8.33%;
+}
+.col-10 {
+	width: 83.33%;
+}
+.col-11 {
+	width: 91.66%;
+}
+.col-12 {
+	width: 100%;
+}
+.about-box {
+	width: 90%;
+	margin: 0 auto;
+	line-height: 1.5;
+	background-color: rgb(255, 255, 255);
+	width: 300px;
+	position: absolute;
+	left: 10px;
+	bottom: 25px;
+	z-index: 2;
+}
+.about-header {
+	text-align: center;
+	margin-bottom: 15px;
+}
+.credits {
+	font-size: 80%;
+	padding: 0 0 10px 5px;
+}
+.icon img {
+	float: right;
+}
+.dependencies {
+	margin-top: 20px;
+	text-align: center;
+}
+#links {
+	font-size: 80%;
+}
+

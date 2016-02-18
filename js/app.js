@@ -1,4 +1,6 @@
-/** The Data Model: Would normally be called from a server */
+/** The Data Model: Would normally be called from a server
+ *  The app can be adopted to any location by chaning only Model data
+ */
 var Model = {
 	currentPlace: null,
 	myPlaces: [
@@ -88,6 +90,10 @@ var Model = {
 			},
 			startUrl: 'https://api.yelp.com/v2/business/'
 		}
+	],
+	/** Boundaries for the map*/
+	myCoords: [
+		{south:35.856494, west:-84.528388, north:35.886037, east:-84.507149}
 	]
 };
 
@@ -107,6 +113,9 @@ var Control = {
 			}
 		}
 		return vendorData;
+	},
+	getMyCoords: function() {
+		return Model.myCoords;
 	}
 };
 
@@ -237,7 +246,6 @@ var markers = ko.observableArray();
 /** Structure supplied by Google's API. I moved the controls around a bit */
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
-		center: {lat: 35.874415, lng: -84.515031},
 		zoomControl: true,
 		zoomControlOptions: {
 			position: google.maps.ControlPosition.LEFT_CENTER
@@ -264,9 +272,9 @@ function initMap() {
 		map.setCenter(center);
 	});
 	
-	map.fitBounds(
-		{south:35.856494, west:-84.528388, north:35.886037, east:-84.507149}
-	);
+	/** Rather than center on a point, we give the map boundaries */
+	var coords = Control.getMyCoords();
+	map.fitBounds(coords[0]);
 	
 	allPlaces = Control.getAllPlaces();
 	initMarkers(allPlaces);
