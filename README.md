@@ -10,3 +10,11 @@ To build a map of any neighborhood using Google Maps API, adding markers of nota
 - `oauth-signature.js` - [Oauth Signature Generator](https://github.com/bettiolo/oauth-signature-js) by Marco Bettiolo
 - [Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/)
 - `jquery` (uses Google's [hosted jquery](https://developers.google.com/speed/libraries/))
+
+### Other Credits
+
+The replay, checkmark, circle and knife graphics are by [Freepik](http://www.freepik.com/) from [Flaticon](http://www.flaticon.com/) and are licensed under [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/). Made with [Logo Maker](http://logomakr.com).
+
+The pizza graphic is by [Miu Icons (Linh Pham)](http://linhpham.me/miu) from [Flaticon](http://www.flaticon.com/) and is licensed under [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/). Made with [Logo Maker](http://logomakr.com).
+
+The barber pole and cannon graphics come from [Icons8.com](https://icons8.com/). [Licence](https://icons8.com/license/)
