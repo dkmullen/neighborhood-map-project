@@ -70,6 +70,9 @@ strong {
 li {
 	list-style: none;
 }
+input, button:focus {
+		outline: 0;
+	}
 #header {
 	position: absolute;
 	z-index: 1;
@@ -137,6 +140,49 @@ li {
 .infowindow #credits {
 	font-size: 80%;
 }
+#info-button {
+	position: absolute;
+	left: 12px;
+	top: 100px;
+	background-color: transparent;
+	background-image: url(../pix/info.png);
+	height: 24px;
+	width: 24px;
+	border: none;
+}
+
+/* CSS for credits-box */
+#credits {
+	margin: 0 auto;
+	line-height: 1.5;
+	background-color: rgb(245, 245, 245);
+	width: 250px;
+	font-size: 80%;
+	text-align: center;
+	padding: 10px 25px 10px 25px;
+	position: absolute;
+	left: 55px;
+	top: 85px;
+	z-index: 3;
+}
+#credits ul {
+	margin-top: 10px;
+}
+#credits ul li {
+	list-style-type: disc;
+	text-align: left;
+}
+#credits a {
+	color: rgb(37, 107, 186);
+	text-decoration: none;
+}
+#x {
+	background-color: transparent;
+	background-image: url(../pix/x.png);
+	height: 32px;
+	width: 32px;
+	border: none;
+}
 
 @media (max-height:499px) {
 	#menu {
@@ -162,7 +208,6 @@ li {
 		font-size: 150%;
 	}
 	#info-box {
-		/* display: none; */
 		padding-right: 40px;
 	}
 	.hamburger-button {
@@ -198,54 +243,13 @@ li {
 	#header h1{
 		font-size: 130%;
 	}
+	#credits {
+		left: 35px;
+		top: 85px;
+		z-index: 2;
+		width: 225px;
+	}
+	#info-box ul li {
+		padding-left: 20px;
+	}
 }
-
-/* CSS for about-box */
-
-.row {
-	width: 100%;
-	display: flex;
-	flex-wrap: wrap;
-}
-.col-1 {
-	width: 8.33%;
-}
-.col-10 {
-	width: 83.33%;
-}
-.col-11 {
-	width: 91.66%;
-}
-.col-12 {
-	width: 100%;
-}
-.about-box {
-	width: 90%;
-	margin: 0 auto;
-	line-height: 1.5;
-	background-color: rgb(255, 255, 255);
-	width: 300px;
-	position: absolute;
-	left: 10px;
-	bottom: 25px;
-	z-index: 2;
-}
-.about-header {
-	text-align: center;
-	margin-bottom: 15px;
-}
-.credits {
-	font-size: 80%;
-	padding: 0 0 10px 5px;
-}
-.icon img {
-	float: right;
-}
-.dependencies {
-	margin-top: 20px;
-	text-align: center;
-}
-#links {
-	font-size: 80%;
-}
-

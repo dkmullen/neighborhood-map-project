@@ -349,8 +349,10 @@ function toggleBounce() {
 function ViewModel() {
 	var self = this;
 	var bool = false;
+	var bool2 = false;
 	self.filterStr = ko.observable('');
 	self.showMenu = ko.observable(bool);
+	self.showCredits = ko.observable(bool2);
 	self.noMatches = ko.observable();
 	
 	var allPlaces = Control.getAllPlaces();
@@ -362,9 +364,16 @@ function ViewModel() {
 	
 	/** Flips the boolean in the showMenu observable, toggling the menu on a
 	 *  mobile device */
-	this.toggle = function() {
+	this.toggleMenu = function() {
 		bool = !bool;
 		return self.showMenu(bool);
+	};
+	
+	/** Flips the boolean in the showCredits observable, toggling the menu on a
+	 *  mobile device */
+	this.toggleCredits = function() {
+		bool = !bool;
+		return self.showCredits(bool);
 	};
 	
 	/* Refreshes the menu to show all items after filter has removed some */
@@ -418,5 +427,7 @@ function ViewModel() {
 			this.noMatches(true);
 		}
 	};
+	
+	this
 }
 ko.applyBindings(new ViewModel());

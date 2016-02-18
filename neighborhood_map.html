@@ -52,12 +52,32 @@
 		
 		<!-- Binds hamburger button to toggle function, toggles the 
 				menu on moble devices -->
-			<button type="button" class="hamburger-button" data-bind="click: toggle">	
+			<button type="button" class="hamburger-button" data-bind="click: toggleMenu">	
 					<span class="horiz-bar"></span>
 					<span class="horiz-bar"></span>
 					<span class="horiz-bar"></span>
 			</button>
 		</div>
+		
+		<!-- Opens and closes the credits box; can also be closed with the 
+		'X' button below -->
+		<button id="info-button" data-bind="click: toggleCredits"></button>
+		
+		<div id="credits" data-bind="visible: showCredits">
+			<h3><strong>Neighborhood Map Project</strong></h3>
+			<p>For <a href="http://udacity.com">Udacity</a> - By Dennis Mullen</p>
+			
+			<ul>
+				<li><strong>Replay, checkmark, circle</strong> and <strong>knife</strong> graphics are by <a href="http://www.freepik.com/">Freepik</a> from <a href="http://www.flaticon.com/">Flaticon</a> and are licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a>. Made with <a href="http://logomakr.com" title="Logo Maker">Logo Maker</a></li>
+				
+				<li>Miu Icons graphic <strong>(Pizza)</strong> by <a href="http://linhpham.me/miu">Linh Pham</a> from <a href="http://www.flaticon.com/">Flaticon</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a>. Made with <a href="http://logomakr.com" title="Logo Maker">Logo Maker</a></li>
+						
+				<li><strong>Barber pole, X, info</strong> and <strong>cannon</strong> graphics: <a href="https://icons8.com/">Icons8.com</a>. <a href="https://icons8.com/license/"> (License)</a></li>
+			</ul>
+			
+			<!-- Closes the credits box (this is the second way to do it -->
+			<button id="x" data-bind="click: toggleCredits"></button>
+		</div>	
 	</div>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
