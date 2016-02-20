@@ -140,7 +140,7 @@ function getZomato(x) {
 			'<strong>Average Zomato Rating:</strong> ' + 
 			business.user_rating.aggregate_rating + ' (' + 
 			business.user_rating.rating_text + ')</p>' +
-			'<p id="credits"><a href="' + business.url + 
+			'<p id="vendor-credits"><a href="' + business.url + 
 			'" target="new">Powered by Zomato</a></p><div>';
 		/**  If Zomato's 'business thumb' is their placeholder, ignore it. */
 		if (business.thumb !== 
@@ -225,7 +225,7 @@ function getYelp(x) {
 			'Phone: ' + business.display_phone + '<br>' +
 			'<img src="' + business.rating_img_url +'"><br>' +
 			'<strong>Rating:</strong> ' + business.rating + '</p>' +
-			'<p id="credits"><a href="' + business.url + 
+			'<p id="vendor-credits"><a href="' + business.url + 
 			'" target="new">Visit our Yelp Page</a></p><br>' +
 			'<img src="' + business.image_url + '"><div>'; 
 		}
@@ -353,7 +353,7 @@ function ViewModel() {
 	self.filterStr = ko.observable('');
 	self.showMenu = ko.observable(bool);
 	self.showCredits = ko.observable(bool2);
-	self.noMatches = ko.observable();
+	self.noMatches = ko.observable(0);
 	
 	var allPlaces = Control.getAllPlaces();
 	for (var i = 0; i < allPlaces.length; i ++) {
@@ -379,7 +379,7 @@ function ViewModel() {
 	/* Refreshes the menu to show all items after filter has removed some */
 	this.showAll = function() {
 		/** Turns off the no matches messagge */
-		this.noMatches(false);
+		this.noMatches(0);
 		/** Makes all the menu items visible, resets each marker */
 		for (var i = 0; i < this.places().length; i++) {
 			this.places()[i].visible(true);
@@ -391,7 +391,7 @@ function ViewModel() {
 	 *  @function
 	 */
 	this.filter = function(filterStr) {
-		this.noMatches(false);
+		this.noMatches(0);
 		var counter = 0;
 		var result = this.filterStr().toLowerCase();
 		for (var i = 0; i < this.places().length; i++) {
@@ -424,10 +424,8 @@ function ViewModel() {
 		 *  makes visible the no matches message */
 		if (counter == (-1 * this.places().length)) {
 			this.showAll();
-			this.noMatches(true);
+			this.noMatches(1);
 		}
 	};
-	
-	this
 }
 ko.applyBindings(new ViewModel());

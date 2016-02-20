@@ -24,14 +24,14 @@
 				 sets a click action to activate the match function,
 				 makes a visible binding to the visible property
 				 of the cooresponsing place-->
-				<li data-bind="text: title, click: match, 
+				<li data-bind="text: title, click: match,
 					visible: visible"></li>
 			</ul>
 			
 			<!-- The two bindings send the filterStr term to the filter function -->
 			<form id="filter" data-bind="submit: filter">
-				<input id="search" type="text" size="25" 
-					placeholder="Filter results with a search term" 
+				<input id="search" type="text" size="23" 
+					placeholder="Search for something" 
 					autocomplete="on" data-bind="value: filterStr">
 				<input id="submit" type="submit" value="">
 			</form>
@@ -42,10 +42,7 @@
 			
 			<!-- Binds the no-matches message to noMatches function, displays
 			the message if search fails-->
-			<div id="no-matches" 
-				data-bind="visible: noMatches">No matching results
-			</div>
-			
+			<div id="no-matches" data-bind="style: { visibility: noMatches() > 0 ? 'visible' : 'hidden'}">No matching results</div>
 		</div>
 		
 		<div id="hamburger-menu">

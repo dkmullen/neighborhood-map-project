@@ -74,10 +74,10 @@ input, button:focus {
 		outline: 0;
 	}
 #header {
-	position: absolute;
+	position: fixed;
 	z-index: 1;
 	right: 0;
-	top: 10px;
+	top: 0;
 	padding: 10px;
 	text-align: right;
 	line-height: 1.25;
@@ -86,15 +86,16 @@ input, button:focus {
 }
 /* The info-box is the container of the nav menu */
 #info-box {
-	position: absolute;
+	position: fixed;
 	right: 0;
 	bottom: 15px;
 	z-index: 1;
 	background-color: rgba(64, 64, 64, 0.5);
 	color: rgb(255, 255, 255);
-	padding: 15px;
+	padding: 15px 15px 5px 15px;
 	line-height: 1.25;
-	width: 275px;
+	width: 300px;
+	font-size: 110%;
 }
 #menu li:hover {
 	background-color: #000;
@@ -103,7 +104,7 @@ input, button:focus {
 	display: inline-block;
 }
 #search {
-	margin-bottom: 10px;
+	margin-bottom: 5px;
 }
 #submit {
 	background-color: transparent;
@@ -113,6 +114,7 @@ input, button:focus {
 	margin-top: 5px;
 	height: 22px;
 	width: 25px;
+	display: inline-block;
 }
 #show {
 	background-color: transparent;
@@ -124,11 +126,30 @@ input, button:focus {
 	width: 25px;
 	display: inline-block;
 }
+.hamburger-button {
+	position: fixed;
+	right: 3px;
+	bottom: 40px;
+	z-index: 2;
+	background-color: transparent;
+	border: none;
+	}
+.hamburger-button:focus {
+	outline: 0; 
+}
+.hamburger-button .horiz-bar {
+    display: block;
+	width: 25px;
+	height: 3px;
+	border-radius: 1px;
+	background-color: rgb(0, 0, 0);
+}
+/* Keeps the top bar in hamburger-button from having a margin */
+.horiz-bar + .horiz-bar {
+	margin-top: 6px;
+}
 #no-matches {
 	font-size: 70%;
-	position: absolute;
-	bottom: 4px;
-	right: 192px;
 	color: rgb(255, 204, 0);
 }
 /* Styles the infowindow Google Maps creates */
@@ -137,13 +158,13 @@ input, button:focus {
 	margin: 0 auto;
 	padding: 5px;
 }
-.infowindow #credits {
+.infowindow #vendor-credits {
 	font-size: 80%;
 }
 #info-button {
-	position: absolute;
-	left: 12px;
-	top: 100px;
+	position: fixed;
+	left: 5px;
+	bottom: 40px;
 	background-color: transparent;
 	background-image: url(../pix/info.png);
 	height: 24px;
@@ -161,8 +182,8 @@ input, button:focus {
 	text-align: center;
 	padding: 10px 25px 10px 25px;
 	position: absolute;
-	left: 55px;
-	top: 85px;
+	left: 5px;
+	bottom: 85px;
 	z-index: 3;
 }
 #credits ul {
@@ -184,72 +205,30 @@ input, button:focus {
 	border: none;
 }
 
-@media (max-height:499px) {
-	#menu {
+@media (max-height: 499px), (max-width: 399px){
+	#info-box {
 		font-size: 85%;
 	}
 }
-@media (min-height:700px) {
-	#menu {
-		font-size: 110%;
-	}
-}
-/* Makes sure the menu gets turned back on */
-@media (min-width: 500px) {
-	#info-box {
-		display: block !important;
-	} 
-	.hamburger-button {
-		display: none;
-	}
-}
-@media (max-width:499px) {
+@media (max-width: 499px), (max-height: 399px) {
 	#header h1{
 		font-size: 150%;
 	}
-	#info-box {
-		padding-right: 40px;
-	}
-	.hamburger-button {
-	  position: fixed;		
-	  right: 5px;
-	  bottom: 35px;
-	  z-index: 2;
-	  display: block;
-	  padding: 7px 7px;
-	  background-color: rgb(64, 64, 64);
-	  border: 1px solid rgb(255, 255, 255);
-	  border-radius: 5px;
-	}
-	.hamburger-button:focus {
-		outline: 0; 
-	}
-	.hamburger-button .horiz-bar {
-	  display: block;
-	  width: 22px;
-	  height: 3px;
-	  border-radius: 1px;
-	  background-color: rgb(255, 255, 255);
-	}
-	/* Keeps the top bar in hamburger-button from having a margin */
-	.horiz-bar + .horiz-bar {
-		margin-top: 6px;
+	#header h3 {
+		font-size: 100%
 	}
 	#no-matches {
 		right: 215px;
 	}
 }
-@media (max-width:399px) {
+@media (max-width: 399px), (max-height: 359px) {
 	#header h1{
 		font-size: 130%;
 	}
-	#credits {
-		left: 35px;
-		top: 85px;
-		z-index: 2;
-		width: 225px;
+	#header h3 {
+		font-size: 90%
 	}
-	#info-box ul li {
-		padding-left: 20px;
+	#credits {
+		width: 225px;
 	}
 }
