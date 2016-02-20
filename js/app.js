@@ -348,7 +348,7 @@ function toggleBounce() {
 /** ViewModel */
 function ViewModel() {
 	var self = this;
-	var bool = false;
+	var bool = true;
 	var bool2 = false;
 	self.filterStr = ko.observable('');
 	self.showMenu = ko.observable(bool);

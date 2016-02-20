@@ -9,7 +9,7 @@ h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
 del, dfn, em, img, ins, kbd, q, s, samp,
 small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
+b, u, i, center, 
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
@@ -92,26 +92,24 @@ input, button:focus {
 	z-index: 1;
 	background-color: rgba(64, 64, 64, 0.5);
 	color: rgb(255, 255, 255);
-	padding: 15px 15px 5px 15px;
+	padding: 15px 5px 0 15px;
 	line-height: 1.25;
-	width: 300px;
 	font-size: 110%;
 }
 #menu li:hover {
 	background-color: #000;
 }
 #filter {
-	display: inline-block;
+	display: block;
+	margin-bottom: 5px;
 }
 #search {
-	margin-bottom: 5px;
+	margin: 5px 5px 10px 0;
 }
 #submit {
 	background-color: transparent;
 	background-image: url(../pix/checkmark.png);
 	border: none;
-    padding: 3px;
-	margin-top: 5px;
 	height: 22px;
 	width: 25px;
 	display: inline-block;
@@ -120,8 +118,6 @@ input, button:focus {
 	background-color: transparent;
 	background-image: url(../pix/refresh.png);
 	border: none;
-    padding: 3px;
-	margin-top: 5px;
 	height: 22px;
 	width: 25px;
 	display: inline-block;
@@ -129,11 +125,12 @@ input, button:focus {
 .hamburger-button {
 	position: fixed;
 	right: 3px;
-	bottom: 40px;
+	bottom: 25px;
 	z-index: 2;
 	background-color: transparent;
 	border: none;
-	}
+	display: block;
+}
 .hamburger-button:focus {
 	outline: 0; 
 }
@@ -151,6 +148,9 @@ input, button:focus {
 #no-matches {
 	font-size: 70%;
 	color: rgb(255, 204, 0);
+	position: relative;
+	bottom: 6px;
+	display: inline-block;
 }
 /* Styles the infowindow Google Maps creates */
 .infowindow {
@@ -162,9 +162,6 @@ input, button:focus {
 	font-size: 80%;
 }
 #info-button {
-	position: fixed;
-	left: 5px;
-	bottom: 40px;
 	background-color: transparent;
 	background-image: url(../pix/info.png);
 	height: 24px;
@@ -178,12 +175,13 @@ input, button:focus {
 	line-height: 1.5;
 	background-color: rgb(245, 245, 245);
 	width: 250px;
+	max-width: 80%;
 	font-size: 80%;
 	text-align: center;
 	padding: 10px 25px 10px 25px;
 	position: absolute;
-	left: 5px;
-	bottom: 85px;
+	left: 75px;
+	bottom: 0;
 	z-index: 3;
 }
 #credits ul {
@@ -204,11 +202,22 @@ input, button:focus {
 	width: 32px;
 	border: none;
 }
-
-@media (max-height: 499px), (max-width: 399px){
+@media (min-width: 700px) {
+	#info-box {
+		/*display: block !important;*/
+	}
+}
+@media (max-width: 699px) {
+	.hamburger-button {
+		display: block;
+	}
+}
+@media (max-width: 399px), (max-height: 499px){
 	#info-box {
 		font-size: 85%;
 	}
+	.hamburger-button .horiz-bar {
+		width: 22px;
 }
 @media (max-width: 499px), (max-height: 399px) {
 	#header h1{
@@ -216,9 +225,6 @@ input, button:focus {
 	}
 	#header h3 {
 		font-size: 100%
-	}
-	#no-matches {
-		right: 215px;
 	}
 }
 @media (max-width: 399px), (max-height: 359px) {
@@ -230,5 +236,6 @@ input, button:focus {
 	}
 	#credits {
 		width: 225px;
+		max-width: 80%
 	}
 }

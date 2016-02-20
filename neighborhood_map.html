@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="css/style.css">
     <title>Neighborhood Map</title>
 </head>
@@ -29,20 +29,32 @@
 			</ul>
 			
 			<!-- The two bindings send the filterStr term to the filter function -->
+			
 			<form id="filter" data-bind="submit: filter">
-				<input id="search" type="text" size="23" 
+				<input id="search" type="text" size="24" 
 					placeholder="Search for something" 
-					autocomplete="on" data-bind="value: filterStr">
-				<input id="submit" type="submit" value="">
-			</form>
+					autocomplete="on" data-bind="value: filterStr"><input id="submit" type="submit" value="">
+				
+				
+			
 			
 			<!-- Binds the show button (circular arrow) to showAll function, 
 			restores all items to the menu -->
 			<button id="show" data-bind="click: showAll"></button>
 			
+			<!-- Opens and closes the credits box; can also be closed with the 
+			'X' button below -->
+			<button id="info-button" data-bind="click: toggleCredits"></button>
+			
 			<!-- Binds the no-matches message to noMatches function, displays
 			the message if search fails-->
-			<div id="no-matches" data-bind="style: { visibility: noMatches() > 0 ? 'visible' : 'hidden'}">No matching results</div>
+			<br><div id="no-matches" data-bind="style: { visibility: noMatches() > 
+				0 ? 'visible' : 'hidden'}">No matching results</div>
+			
+			</form>
+			
+			
+			
 		</div>
 		
 		<div id="hamburger-menu">
@@ -56,9 +68,7 @@
 			</button>
 		</div>
 		
-		<!-- Opens and closes the credits box; can also be closed with the 
-		'X' button below -->
-		<button id="info-button" data-bind="click: toggleCredits"></button>
+		
 		
 		<div id="credits" data-bind="visible: showCredits">
 			<h3><strong>Neighborhood Map Project</strong></h3>
