@@ -91,13 +91,18 @@ input, button:focus {
 	bottom: 15px;
 	z-index: 1;
 	background-color: rgba(64, 64, 64, 0.5);
-	color: rgb(255, 255, 255);
 	padding: 15px 5px 0 15px;
 	line-height: 1.25;
 	font-size: 110%;
+	color: rgb(255, 255, 255);
 }
 #menu li:hover {
 	background-color: #000;
+}
+#no-matches {
+	font-size: 70%;
+	color: rgb(255, 204, 0);
+	display: inline-block;
 }
 #filter {
 	display: block;
@@ -113,6 +118,7 @@ input, button:focus {
 	height: 22px;
 	width: 25px;
 	display: inline-block;
+	margin-right: 5px;
 }
 #show {
 	background-color: transparent;
@@ -121,11 +127,12 @@ input, button:focus {
 	height: 22px;
 	width: 25px;
 	display: inline-block;
+	margin-right: 40px;
 }
 .hamburger-button {
 	position: fixed;
 	right: 3px;
-	bottom: 25px;
+	bottom: 33px;
 	z-index: 2;
 	background-color: transparent;
 	border: none;
@@ -145,13 +152,6 @@ input, button:focus {
 .horiz-bar + .horiz-bar {
 	margin-top: 6px;
 }
-#no-matches {
-	font-size: 70%;
-	color: rgb(255, 204, 0);
-	position: relative;
-	bottom: 6px;
-	display: inline-block;
-}
 /* Styles the infowindow Google Maps creates */
 .infowindow {
 	text-align: center;
@@ -167,8 +167,10 @@ input, button:focus {
 	height: 24px;
 	width: 24px;
 	border: none;
+	position: fixed;
+	bottom: 50px;
+	left: 15px;
 }
-
 /* CSS for credits-box */
 #credits {
 	margin: 0 auto;
@@ -202,6 +204,7 @@ input, button:focus {
 	width: 32px;
 	border: none;
 }
+/* End credits box, begin media queries */
 @media (min-width: 700px) {
 	#info-box {
 		/*display: block !important;*/
@@ -212,12 +215,10 @@ input, button:focus {
 		display: block;
 	}
 }
-@media (max-width: 399px), (max-height: 499px){
+@media (max-height: 399px) {
 	#info-box {
-		font-size: 85%;
+		font-size: 90%;
 	}
-	.hamburger-button .horiz-bar {
-		width: 22px;
 }
 @media (max-width: 499px), (max-height: 399px) {
 	#header h1{
@@ -237,5 +238,13 @@ input, button:focus {
 	#credits {
 		width: 225px;
 		max-width: 80%
+	}
+	.hamburger-button .horiz-bar {
+		width: 22px;
+	}
+}
+@media (max-width: 359px) {
+	#show {
+		margin-right: 33px;
 	}
 }

@@ -28,6 +28,13 @@
 					visible: visible"></li>
 			</ul>
 			
+			<!-- Binds the no-matches message to noMatches function, displays
+			the message if search fails-->
+			<div id="no-matches" data-bind="style: { visibility: noMatches() > 
+				0 ? 'visible' : 'hidden'}">No matching results
+			</div>
+			
+			
 			<!-- The two bindings send the filterStr term to the filter function -->
 			
 			<form id="filter" data-bind="submit: filter">
@@ -35,30 +42,13 @@
 					placeholder="Search for something" 
 					autocomplete="on" data-bind="value: filterStr"><input id="submit" type="submit" value="">
 				
-				
-			
-			
-			<!-- Binds the show button (circular arrow) to showAll function, 
-			restores all items to the menu -->
-			<button id="show" data-bind="click: showAll"></button>
-			
-			<!-- Opens and closes the credits box; can also be closed with the 
-			'X' button below -->
-			<button id="info-button" data-bind="click: toggleCredits"></button>
-			
-			<!-- Binds the no-matches message to noMatches function, displays
-			the message if search fails-->
-			<br><div id="no-matches" data-bind="style: { visibility: noMatches() > 
-				0 ? 'visible' : 'hidden'}">No matching results</div>
-			
+				<!-- Binds the show button (circular arrow) to showAll function, 
+				restores all items to the menu -->
+				<button id="show" data-bind="click: showAll"></button>
 			</form>
-			
-			
-			
 		</div>
 		
 		<div id="hamburger-menu">
-		
 		<!-- Binds hamburger button to toggle function, toggles the 
 				menu on moble devices -->
 			<button type="button" class="hamburger-button" data-bind="click: toggleMenu">	
@@ -68,7 +58,9 @@
 			</button>
 		</div>
 		
-		
+		<!-- Opens and closes the credits box; can also be closed with the 
+		'X' button below -->
+		<button id="info-button" data-bind="click: toggleCredits"></button>
 		
 		<div id="credits" data-bind="visible: showCredits">
 			<h3><strong>Neighborhood Map Project</strong></h3>

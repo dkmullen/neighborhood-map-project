@@ -327,7 +327,7 @@ function match(x) {
 			else if (x.source == 'Yelp') {
 				getYelp(x);
 			}
-		} 
+		}
 	}
 }
 
@@ -348,7 +348,7 @@ function toggleBounce() {
 /** ViewModel */
 function ViewModel() {
 	var self = this;
-	var bool = true;
+	var bool;
 	var bool2 = false;
 	self.filterStr = ko.observable('');
 	self.showMenu = ko.observable(bool);
@@ -362,8 +362,28 @@ function ViewModel() {
 	}
 	self.places = ko.observableArray(allPlaces);
 	
+	/** This media query event handler comes from Craig Buckler 
+	 *  http://www.sitepoint.com/javascript-media-queries/
+	 *  Listens for screen size change, flips the boolean to show or hid menu.
+	 *  I found this difficult to do with a CSS media query due to the 
+	 *  visible binding on the menu being over-ridden by a CSS property
+	 */
+	if (matchMedia) {
+	    var mq = window.matchMedia('(min-width: 600px)');
+		    mq.addListener(WidthChange);
+		    WidthChange(mq);
+	}
+	function WidthChange(mq) {
+	    if (mq.matches) {
+			self.showMenu(true);
+		} else {
+			self.showMenu(false);
+	  }
+	}
+	
 	/** Flips the boolean in the showMenu observable, toggling the menu on a
-	 *  mobile device */
+	 *  mobile device when hamburger button is clicked 
+	 */
 	this.toggleMenu = function() {
 		bool = !bool;
 		return self.showMenu(bool);
