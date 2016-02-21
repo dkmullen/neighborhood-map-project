@@ -36,7 +36,6 @@
 			
 			
 			<!-- The two bindings send the filterStr term to the filter function -->
-			
 			<form id="filter" data-bind="submit: filter">
 				<input id="search" type="text" size="24" 
 					placeholder="Search for something" 
@@ -47,6 +46,7 @@
 				<button id="show" data-bind="click: showAll"></button>
 			</form>
 		</div>
+		<!-- End info-box (the container for the nav menu) -->
 		
 		<div id="hamburger-menu">
 		<!-- Binds hamburger button to toggle function, toggles the 
@@ -58,26 +58,42 @@
 			</button>
 		</div>
 		
-		<!-- Opens and closes the credits box; can also be closed with the 
+		<!-- Opens and closes the credits box, which can also be closed with the 
 		'X' button below -->
 		<button id="info-button" data-bind="click: toggleCredits"></button>
 		
+		<!-- Credits box -->
 		<div id="credits" data-bind="visible: showCredits">
 			<h3><strong>Neighborhood Map Project</strong></h3>
 			<p>For <a href="http://udacity.com">Udacity</a> - By Dennis Mullen</p>
 			
 			<ul>
-				<li><strong>Replay, checkmark, circle</strong> and <strong>knife</strong> graphics are by <a href="http://www.freepik.com/">Freepik</a> from <a href="http://www.flaticon.com/">Flaticon</a> and are licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a>. Made with <a href="http://logomakr.com" title="Logo Maker">Logo Maker</a></li>
+				<li><strong>Replay, checkmark, circle</strong> and 
+				<strong>knife</strong> graphics are by 
+				<a href="http://www.freepik.com/">Freepik</a> from 
+				<a href="http://www.flaticon.com/">Flaticon</a> and are 
+				licensed under <a href="http://creativecommons.org/licenses/by/3.0/" 
+				title="Creative Commons BY 3.0">CC BY 3.0</a>. Made with 
+				<a href="http://logomakr.com" title="Logo Maker">Logo Maker</a></li>
 				
-				<li>Miu Icons graphic <strong>(Pizza)</strong> by <a href="http://linhpham.me/miu">Linh Pham</a> from <a href="http://www.flaticon.com/">Flaticon</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a>. Made with <a href="http://logomakr.com" title="Logo Maker">Logo Maker</a></li>
+				<li>Miu Icons graphic <strong>(Pizza)</strong> by 
+				<a href="http://linhpham.me/miu">Linh Pham</a> from 
+				<a href="http://www.flaticon.com/">Flaticon</a> is licensed under 
+				<a href="http://creativecommons.org/licenses/by/3.0/" 
+				title="Creative Commons BY 3.0">CC BY 3.0</a>. Made with 
+				<a href="http://logomakr.com" title="Logo Maker">Logo Maker</a></li>
 						
-				<li><strong>Barber pole, X, info</strong> and <strong>cannon</strong> graphics: <a href="https://icons8.com/">Icons8.com</a>. <a href="https://icons8.com/license/"> (License)</a></li>
+				<li><strong>Barber pole, X, info</strong> and <strong>cannon</strong> 
+				graphics: <a href="https://icons8.com/">Icons8.com</a>. 
+				<a href="https://icons8.com/license/"> (License)</a></li>
 			</ul>
 			
 			<!-- Closes the credits box (this is the second way to do it -->
 			<button id="x" data-bind="click: toggleCredits"></button>
 		</div>	
-	</div>
+		<!-- End credits box -->
+		
+	</div> <!-- End container -->
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 	<script type='text/javascript' src="js/oauth-signature.js"></script>

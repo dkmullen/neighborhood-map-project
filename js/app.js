@@ -1,5 +1,5 @@
 /** The Data Model: Would normally be called from a server
- *  The app can be adopted to any location by chaning only Model data
+ *  The app can be adopted to any location by changing only Model data
  */
 var Model = {
 	currentPlace: null,
@@ -96,6 +96,7 @@ var Model = {
 		{south:35.856494, west:-84.528388, north:35.886037, east:-84.507149}
 	]
 };
+/** End Model ----------------------------------------- */
 
 /** Control: Functions that communicate directly with the Model */
 var Control = {
@@ -118,6 +119,7 @@ var Control = {
 		return Model.myCoords;
 	}
 };
+/** End Control --------------------------------------- */
 
 /** Function for retrieving data from Zomato, formatting it for infowindow 
  *  The non-descriptive variable 'x' is used throughout to refer to one thing
@@ -127,10 +129,13 @@ var Control = {
 function getZomato(x) {
 	var businessStr;
 	this.vendorData = Control.getVendor('Zomato');
-	var url = this.vendorData[0].startUrl + x.locationID + '&apikey=' + 
+	
+	/** Creates the url Zomato requires for JSON request */
+	var zomatoUrl = this.vendorData[0].startUrl + x.locationID + '&apikey=' + 
 		this.vendorData[0].key;
-		
-	$.getJSON( url, function( business ) {
+	
+	/** Makes the request, parses the data into a string */	
+	$.getJSON( zomatoUrl, function( business ) {
 		businessStr = 
 			'<div class="infowindow"><h3>' + business.name + '</h3>' +
 			'<p>' + business.location.address + '<br>' + 
@@ -142,13 +147,15 @@ function getZomato(x) {
 			business.user_rating.rating_text + ')</p>' +
 			'<p id="vendor-credits"><a href="' + business.url + 
 			'" target="new">Powered by Zomato</a></p><div>';
-		/**  If Zomato's 'business thumb' is their placeholder, ignore it. */
+		
+		/**  If Zomato's 'business thumb' is their placeholder, don't use it. */
 		if (business.thumb !== 
 			'https://b.zmtcdn.com/images/res_avatar_120_1x_new.png') {
 			businessStr = businessStr + '<div class=infowindow><p><img src="' + 
 			business.thumb +'"></p></div>';
 		}
 	})
+	/** Fills infowindow with the string made above */
 	.done(function() {
 		infowindow.setContent(businessStr);
 	})
@@ -157,6 +164,7 @@ function getZomato(x) {
 		infowindow.setContent(x.description);
 	});
 }
+/** End Zomato ---------------------------------------- */
 
 /** Function for retrieving data from Yelp, formatting it for infowindow
  *  @function
@@ -169,6 +177,7 @@ function getYelp(x) {
   * http://stackoverflow.com/questions/1349404/generate-a-string-of-5-random
 		-characters-in-javascript/1349426#1349426
   * http://stackoverflow.com/users/164392/csharptest-net
+  * Makes the oauth_nonce parameter of nine random integers
   */	
 	function makeid() {
 		var text = "";
@@ -182,6 +191,8 @@ function getYelp(x) {
 /** The method below for generating an oauth signature is from Marco Bettiolo
   * (with my data added) and requires his oauth-signature.js
   * https://github.com/bettiolo/oauth-signature-js
+  * One important change: yelpUrl below is changed from Bettiolo's sample. See
+  * this: https://github.com/bettiolo/oauth-signature-js/issues/18 
   */
 	var httpMethod = 'GET',
 		yelpUrl = vendorData[0].startUrl + x.locationID,
@@ -203,8 +214,9 @@ function getYelp(x) {
 		signature = oauthSignature.generate(httpMethod, yelpUrl, parameters, 
 			consumerSecret, tokenSecret, { encodeSignature: false});
 /** --------------End of Marco Bettiolo's code ---------------- */
-
-	var newUrl = yelpUrl + '?oauth_consumer_key=' + 
+	
+	/** Creates the url Yelp requires for an ajax request */
+	var newYelpUrl = yelpUrl + '?oauth_consumer_key=' + 
 		parameters.oauth_consumer_key + '&oauth_nonce=' + 
 		parameters.oauth_nonce + '&oauth_signature_method=' + 
 		parameters.oauth_signature_method + '&oauth_timestamp=' + 
@@ -212,9 +224,10 @@ function getYelp(x) {
 		parameters.oauth_token + '&oauth_version=' + 
 		parameters.oauth_version + '&oauth_signature=' + encodedSignature;
 	
+	/** Makes the request, parses the data into a string */	
 	$.ajax({
 		type: "GET",
-		url: newUrl,
+		url: newYelpUrl,
 		cache: true,
 		jsonpCallback: 'cb',
 		dataType: "jsonp",
@@ -230,6 +243,7 @@ function getYelp(x) {
 			'<img src="' + business.image_url + '"><div>'; 
 		}
 	})	
+	/** Fills infowindow with the string made above */
 	.done(function() {
 		infowindow.setContent(businessStr);
 	})
@@ -238,6 +252,7 @@ function getYelp(x) {
 		infowindow.setContent(x.description);
 	});
 }
+/** End Yelp ------------------------------------------ */
 
 /** Init Google Map, etc. */
 var map, infowindow, allPlaces;
@@ -265,6 +280,7 @@ function initMap() {
 	function calculateCenter() {
 		center = map.getCenter();
 	}
+	/** The two listeners below read and recalculate the map center */
 	google.maps.event.addDomListener(map, 'idle', function() {
 		calculateCenter();
 	});
@@ -287,6 +303,10 @@ function initInfoWindow() {
 		});
 }
 
+/** Loops through the places in Model, makes a marker with the listed properties
+ *  and a custom icon, adds a listener and pushes each to the observable array
+ *  @function
+*/
 function initMarkers(allPlaces) {
 	for (var i = 0; i < allPlaces.length; i++) {
 		this.place = allPlaces[i]; 
@@ -318,13 +338,15 @@ function match(x) {
 	for (var i = 0; i < markers().length; i++) {
 		if (markers()[i].title == x.title) {
 			marker = markers()[i];
+			/** Centers the clicked marker */
 			map.panTo({lat: (x.position.lat), lng: (x.position.lng)});
 			infowindow.open(map, marker); 
+			/** Calles toggleBounce, below */
 			toggleBounce(x, marker);
-			if (x.source == 'Zomato') {
+			if (x.source === 'Zomato') {
 				getZomato(x);
 			} 
-			else if (x.source == 'Yelp') {
+			else if (x.source === 'Yelp') {
 				getYelp(x);
 			}
 		}
@@ -344,6 +366,7 @@ function toggleBounce() {
 		setTimeout(function(){ marker.setAnimation(null); }, 750);
 	}
 }
+/** End Google Maps init section ---------------------- */
 
 /** ViewModel */
 function ViewModel() {
@@ -357,9 +380,10 @@ function ViewModel() {
 	
 	var allPlaces = Control.getAllPlaces();
 	for (var i = 0; i < allPlaces.length; i ++) {
-		/** Adds the visible ko.observable to each place */
+		/** Adds the 'visible' ko.observable to each place */
 		allPlaces[i].visible = ko.observable(true);
 	}
+	/** Makes an observable array out of the newly updated allPlaces */
 	self.places = ko.observableArray(allPlaces);
 	
 	/** This media query event handler comes from Craig Buckler 
@@ -369,10 +393,13 @@ function ViewModel() {
 	 *  visible binding on the menu being over-ridden by a CSS property
 	 */
 	if (matchMedia) {
+		/** Adds a media query, listens for width change of window */
 	    var mq = window.matchMedia('(min-width: 600px)');
 		    mq.addListener(WidthChange);
 		    WidthChange(mq);
 	}
+	
+	/** Shows/hides the menu according to width of window */
 	function WidthChange(mq) {
 	    if (mq.matches) {
 			self.showMenu(true);
@@ -398,7 +425,7 @@ function ViewModel() {
 	
 	/* Refreshes the menu to show all items after filter has removed some */
 	this.showAll = function() {
-		/** Turns off the no matches messagge */
+		/** Turns off the no matches message */
 		this.noMatches(0);
 		/** Makes all the menu items visible, resets each marker */
 		for (var i = 0; i < this.places().length; i++) {
@@ -406,14 +433,21 @@ function ViewModel() {
 			markers()[i].setMap(map);
 		}
 	};
+	
 	/** A function that takes an input string, searches each location's title,
-	 *  description, type (ie restaurant, museum) and list of key words*
+	 *  description, type (ie restaurant, museum) and list of key words and
+	 *  updates the display of markers and menu items
 	 *  @function
 	 */
 	this.filter = function(filterStr) {
 		this.noMatches(0);
 		var counter = 0;
+		/** Converts user input to lowercase */
 		var result = this.filterStr().toLowerCase();
+		
+		/** Loops through places array, resets all to visible, makes a string
+		 *  (lower case) of each title, type and keywords; looks for matches
+		 */
 		for (var i = 0; i < this.places().length; i++) {
 			this.places()[i].visible(true);
 			markers()[i].setMap(map);

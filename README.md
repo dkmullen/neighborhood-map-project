@@ -1,9 +1,17 @@
 # Neighborhood Map Project
 A [Udacity](http://udacity.com) class project
 
-**Purpose**
+### Purpose
 
-To build a map of any neighborhood using Google Maps API, adding markers of notable places and connecting them with info from other APIs. This project uses [Yelp](https://www.yelp.com/developers) and [Zomato](https://developers.zomato.com/api) (formerly Urban Spoon).
+To build a map of any neighborhood using [Google Maps API](https://developers.google.com/maps/documentation/javascript/), adding markers of notable places and connecting them with info from other APIs. This project uses [Yelp](https://www.yelp.com/developers) and [Zomato](https://developers.zomato.com/api) (formerly Urban Spoon).
+
+This app can be modified for any location simply by changing location data in the Model in `app.js`. 
+
+### Installation
+
+Simply clone this respository and you can run the app by opening `neighborhood_map.html`. The needed JS files are included in the js directory. HOWEVER, you will also need credentials from the three APIS mentioned above. 
+- Your **Google Maps** key goes into the Google maps script at the bottom of neighborhood_map.html, right between `key=` and `&callback`.
+- Your **Zomato** key and **Yelp** credentials go between the empty quotes (`''`) in `app.js` at the bottom of the data model.
 
 ###  Dependencies
 - `knockout.js` - Delcarative bindings, separation of concerns, etc. [KnockoutJS.com](http://knockoutjs.com/)
