@@ -108,6 +108,7 @@ li {
 }
 #search {
 	margin: 5px 5px 0 0;
+	display: inline-block;
 }
 #submit {
 	background-color: transparent;
@@ -115,7 +116,6 @@ li {
 	border: none;
 	height: 22px;
 	width: 25px;
-	display: inline-block;
 	margin-right: 5px;
 }
 #show {

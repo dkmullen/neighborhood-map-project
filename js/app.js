@@ -11,7 +11,7 @@ var Model = {
 			locationID: 17269784,
 			source: 'Zomato',
 			type: 'Restaurant',			
-			keys: 'pizza Italian Kingston all',
+			keys: 'pizza Italian Mama-Mia\'s',
 			icon: 'pizza.png'
 		},
 		{position: {lat: 35.885723, lng: -84.497461},
@@ -21,7 +21,7 @@ var Model = {
 			locationID: 'gloria-jeans-kingston',
 			source: 'Yelp',
 			type: 'Restaurant',
-			keys: 'burgers sandwiches southern pie Kingston all',
+			keys: 'burgers sandwiches southern pie Gloria-Jean\'s',
 			icon: 'dinner.png'
 		},
 		{position: {lat: 35.882102, lng: -84.505977},
@@ -31,7 +31,7 @@ var Model = {
 			locationID: 17270326,
 			source: 'Zomato',
 			type: 'Restaurant',
-			keys: 'bar tequila beer Kingston all',
+			keys: 'bar tequila beer Don-Eduardo\'s',
 			icon: 'dinner.png'
 		},
 		{position: {lat: 35.877760, lng: -84.511819},
@@ -41,7 +41,7 @@ var Model = {
 			locationID: '17269786',
 			source: 'Zomato',
 			type: 'Restaurant',
-			keys: 'Chinese Asian Kingston all',
+			keys: 'Chinese Asian Mei-Wei',
 			icon: 'dinner.png'
 		},
 		{position: {lat: 35.874415, lng: -84.515031},
@@ -51,7 +51,7 @@ var Model = {
 			locationID: 17269781,
 			source: 'Zomato',
 			type: 'Restaurant',
-			keys: 'breakfast biscuits gravy sliders Kingston all',
+			keys: 'breakfast biscuits gravy sliders Handee-Burger',
 			icon: 'hamburger.png'
 		},
 		{position: {lat: 35.861100, lng: -84.527949},
@@ -61,18 +61,18 @@ var Model = {
 			locationID: 'fort-southwest-point-kingston',
 			source: 'Yelp',
 			type: 'Park',
-			keys: 'museum history cannon Kingston all',
+			keys: 'museum history cannon Fort-Southwest-Point',
 			icon: 'cannon.png'
 		},
 		{position: {lat: 35.870925, lng: -84.515573},
 			map: map,
 			title: 'Kingston Barber Shop',
 			description: 'Kingston Barber Shop: A great place for your' +
-			'Elvis-related looks',
+			' Elvis-related looks',
 			locationID: 'kingston-barber-shop-kingston-3',
 			source: 'Yelp',
 			type: 'Barber',
-			keys: 'barber haircut trim Kingston all',
+			keys: 'barber haircut trim Kingston-Barber-Shop',
 			icon: 'barber.png'
 		}
 	],
@@ -391,10 +391,11 @@ function toggleBounce() {
 }
 /** End Google Maps init section ---------------------- */
 
+
 /** ViewModel */
 function ViewModel() {
 	var self = this;
-	var bool;
+	var bool, placeStr;
 	var bool2 = false;
 	self.filterStr = ko.observable('');
 	self.showMenu = ko.observable(bool);
@@ -474,13 +475,15 @@ function ViewModel() {
 		for (var i = 0; i < this.places().length; i++) {
 			this.places()[i].visible(true);
 			markers()[i].setMap(map);
-			var placeStr = this.places()[i].description.toLowerCase() + ' ' +
-				this.places()[i].title.toLowerCase() +  ' ' +
-				this.places()[i].type.toLowerCase() +
+			
+			self.placeStr = this.places()[i].description.toLowerCase() + ' ' +
+				this.places()[i].title.toLowerCase() +  
+				this.places()[i].type.toLowerCase() + 
 				this.places()[i].keys.toLowerCase();
+			
 			/** Looks for result (the lowercase version of user input in 
 			 *  placeStr (the lowercase version of all the place data) */
-			var n = placeStr.search(result);
+			var n = self.placeStr.search(result);
 			/** -1 indicates no match, so cooresponding menu items and markers
 			 *  are hidden */
 			if (n == -1) {
@@ -503,7 +506,26 @@ function ViewModel() {
 			this.showAll();
 			this.noMatches(1);
 		}
+	};	
+	
+	this.autoFillStr = '';
+	for (var i = 0; i < this.places().length; i++) {
+		self.autoFillStr += this.places()[i].keys + ' ';
+	}
+	var arr = self.autoFillStr.split(' ');
+	console.log(arr);
+	
+	var options = {
+		data: arr,
+		list: {
+			match: {
+				enabled: true
+			}
+		},
+		theme: "dark"
 	};
+
+	$("#search").easyAutocomplete(options);
 }
 ko.applyBindings(new ViewModel());
 
