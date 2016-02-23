@@ -215,7 +215,22 @@ input, button:focus {
 	width: 32px;
 	border: none;
 }
-/* End credits box, begin media queries */
+/* End credits box */
+
+#map-fail {
+	width: 200px;
+	max-width: 75%;
+	text-align: center;
+	border: 1px solid rgb(200, 200, 200);
+	padding: 10px;
+	background-color: rgb(255, 255, 255);
+	z-index: 4;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	margin-top: -75px;
+	margin-left: -100px;
+}
 
 @media (max-height: 399px) {
 	#info-box {

@@ -261,6 +261,7 @@ function getYelp(x) {
 /** Init Google Map, etc. */
 var map, infowindow, allPlaces;
 var markers = ko.observableArray();
+var mapFailMessage = ko.observable(false);
 
 /** Structure supplied by Google's API. I moved the controls around a bit */
 function initMap() {
@@ -275,7 +276,7 @@ function initMap() {
 			position: google.maps.ControlPosition.LEFT_TOP
 		}
 	});	
-	
+
 /** This solution for keeping the map centered on viewport resize comes from:
   * http://stackoverflow.com/questions/8792676/center-google-maps-v3-on-
 	browser-resize-responsive
@@ -304,7 +305,13 @@ function initMap() {
 	initMarkers(allPlaces, coords, bounds);
 	initInfoWindow();
 }
-
+/** When Google Maps fails, onerror in the htmm calls this function
+ *  @function
+ */
+function googleError() {
+	mapFailMessage(true);
+}
+	
 function initInfoWindow() {
 	infowindow = new google.maps.InfoWindow({
 			maxWidth: 275
@@ -499,3 +506,4 @@ function ViewModel() {
 	};
 }
 ko.applyBindings(new ViewModel());
+
