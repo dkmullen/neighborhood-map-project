@@ -128,6 +128,8 @@ var Control = {
  */
 function getZomato(x) {
 	var businessStr;
+	var failStr = '<div class="infowindow">' + x.description +
+			'.<p>(Zomato is not currently available).</p></div>';
 	this.vendorData = Control.getVendor('Zomato');
 	
 	/** Creates the url Zomato requires for JSON request */
@@ -147,7 +149,7 @@ function getZomato(x) {
 			business.user_rating.rating_text + ')</p>' +
 			'<p id="vendor-credits"><a href="' + business.url + 
 			'" target="new">Powered by Zomato</a></p><div>';
-		
+			
 		/**  If Zomato's 'business thumb' is their placeholder, don't use it. */
 		if (business.thumb !== 
 			'https://b.zmtcdn.com/images/res_avatar_120_1x_new.png') {
@@ -161,7 +163,7 @@ function getZomato(x) {
 	})
 	/** Fills infowidow with hard-coded description upon fail */
 	.fail(function() {
-		infowindow.setContent(x.description);
+		infowindow.setContent(failStr);
 	});
 }
 /** End Zomato ---------------------------------------- */
@@ -171,6 +173,8 @@ function getZomato(x) {
  */
 function getYelp(x) {
 	var businessStr;
+	var failStr = '<div class="infowindow">' + x.description +
+			'.<p>(Yelp is not currently available).</p></div>';
 	this.vendorData = Control.getVendor('Yelp');
 
 /** The makeid function (modified slightly by me) comes from csharptest.net
@@ -249,7 +253,7 @@ function getYelp(x) {
 	})
 	/** Fills infowidow with hard-coded description upon fail */
 	.fail(function() {
-		infowindow.setContent(x.description);
+		infowindow.setContent(failStr);
 	});
 }
 /** End Yelp ------------------------------------------ */
@@ -290,10 +294,14 @@ function initMap() {
 	
 	/** Rather than center on a point, we give the map boundaries */
 	var coords = Control.getMyCoords();
-	map.fitBounds(coords[0]);
+	var bounds = new google.maps.LatLngBounds(
+		new google.maps.LatLng(coords[0].south, coords[0].west),
+		new google.maps.LatLng(coords[0].north, coords[0].east)
+	);
+	map.fitBounds(bounds);
 	
 	allPlaces = Control.getAllPlaces();
-	initMarkers(allPlaces);
+	initMarkers(allPlaces, coords, bounds);
 	initInfoWindow();
 }
 
@@ -306,18 +314,23 @@ function initInfoWindow() {
 /** Loops through the places in Model, makes a marker with the listed properties
  *  and a custom icon, adds a listener and pushes each to the observable array
  *  @function
-*/
-function initMarkers(allPlaces) {
+ */
+function initMarkers(allPlaces, coords, bounds) {
+
 	for (var i = 0; i < allPlaces.length; i++) {
 		this.place = allPlaces[i]; 
 		var image = './pix/' + place.icon;
+		
 		marker = new google.maps.Marker({
 			animation: google.maps.Animation.DROP,
 			position: place.position,
 			map: map,
 			icon: image,
-			title: place.title	
+			title: place.title
 		});
+		
+		/** Extends map boundaries to be sure to include each marker */
+		bounds.extend(marker.position);
 		/** Records which marker is clicked, passes it to the two functions*/
 		marker.addListener('click', (function(placeCopy) {
 			return function() {
@@ -326,6 +339,9 @@ function initMarkers(allPlaces) {
 			};
 		})(place));
 		markers.push(marker);
+		
+		/** Expands the map to include each new marker */
+		map.fitBounds(bounds);
 	}
 }
 
