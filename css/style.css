@@ -102,14 +102,17 @@ li {
 	color: rgb(255, 204, 0);
 	display: inline-block;
 }
+/* The HTML form */
 #filter {
 	display: block;
 	margin-bottom: 5px;
 }
+/* The text box */
 #search {
 	margin: 5px 5px 0 0;
 	display: inline-block;
 }
+/* The check button */
 #submit {
 	background-color: transparent;
 	background-image: url(../pix/checkmark.png);
@@ -118,6 +121,7 @@ li {
 	width: 25px;
 	margin-right: 5px;
 }
+/* The circular arrow */
 #show {
 	background-color: transparent;
 	background-image: url(../pix/refresh.png);
@@ -130,7 +134,7 @@ li {
 .hamburger-button {
 	position: fixed;
 	right: 3px;
-	bottom: 40px;
+	bottom: 45px;
 	z-index: 2;
 	background-color: transparent;
 	border: none;
@@ -152,7 +156,7 @@ li {
 }
 #info-button {
 	background-color: transparent;
-	background-image: url(../pix/info2.png);
+	background-image: url(../pix/info.png);
 	height: 36px;
 	width: 36px;
 	border: none;
@@ -217,6 +221,7 @@ input, button:focus {
 }
 /* End credits box */
 
+/* Div that gets displayed when Google Maps fails */
 #map-fail {
 	width: 200px;
 	max-width: 75%;
@@ -226,12 +231,15 @@ input, button:focus {
 	background-color: rgb(255, 255, 255);
 	z-index: 4;
 	position: fixed;
+	/* The lines below center the top corner, then pull the box
+	   back toward center */
 	top: 50%;
 	left: 50%;
 	margin-top: -75px;
 	margin-left: -100px;
 }
 
+/* Media queries start here */
 @media (max-height: 399px) {
 	#info-box {
 		font-size: 90%;

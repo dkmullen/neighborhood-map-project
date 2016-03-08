@@ -7,6 +7,10 @@ To build a map of any neighborhood using [Google Maps API](https://developers.go
 
 This app can be modified for any location simply by changing location data in the Model in `app.js`. 
 
+### View
+
+View a live demo of this project [here](https://cdn.rawgit.com/dkmullen/udacity_fe5_map/master/dist/index.html).
+
 ### Installation
 
 Simply clone this respository and you can run the app by opening `neighborhood_map.html`. The needed JS files are included in the js directory. HOWEVER, you will also need credentials from the three APIS mentioned above. 
@@ -18,6 +22,8 @@ Simply clone this respository and you can run the app by opening `neighborhood_m
 - `oauth-signature.js` - [Oauth Signature Generator](https://github.com/bettiolo/oauth-signature-js) by Marco Bettiolo
 - [Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/)
 - `jquery` (uses Google's [hosted jquery](https://developers.google.com/speed/libraries/))
+- [EasyAutoComplete](http://easyautocomplete.com/), a really nice JQuery plugin for auto-filling forms. Requires: `jquery.easy-autocomplete.js`, `easy-autocomplete.css` 
+
 
 ### Other Credits
 

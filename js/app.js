@@ -51,7 +51,7 @@ var Model = {
 			locationID: 17269781,
 			source: 'Zomato',
 			type: 'Restaurant',
-			keys: 'breakfast biscuits gravy sliders Handee-Burger',
+			keys: 'breakfast biscuits-n-gravy sliders Handee-Burger',
 			icon: 'hamburger.png'
 		},
 		{position: {lat: 35.861100, lng: -84.527949},
@@ -71,22 +71,22 @@ var Model = {
 			' Elvis-related looks',
 			locationID: 'kingston-barber-shop-kingston-3',
 			source: 'Yelp',
-			type: 'Barber',
+			type: 'Barber-Shop',
 			keys: 'barber haircut trim Kingston-Barber-Shop',
 			icon: 'barber.png'
 		}
 	],
 	myVendors: [
 		{vendor: 'Zomato',
-			key: '',
+			key: 'eae8f9e214a0616278ac70ef1df3dfce',
 			startUrl: 'https://developers.zomato.com/api/v2.1/restaurant?res_id='
 		},
 		{vendor: 'Yelp',
 			key: {
-				oauth_consumer_key : '',
-				oauth_token : '',
-				consumerSecret: '',
-				tokenSecret: ''
+				oauth_consumer_key : 'QTiph1Uz4Cpuw2kOa2sG3Q',
+				oauth_token : '0gjDnn-g5CvZg-DOpgs4EuwJ2reEbVtN',
+				consumerSecret: 'YiK5tQt9n5ke2sSFQNof5GkJvHc',
+				tokenSecret: 'Edt0OgvUQHgQfqsP4HWeYkZaUT4'
 			},
 			startUrl: 'https://api.yelp.com/v2/business/'
 		}
@@ -338,6 +338,7 @@ function initMarkers(allPlaces, coords, bounds) {
 		
 		/** Extends map boundaries to be sure to include each marker */
 		bounds.extend(marker.position);
+		
 		/** Records which marker is clicked, passes it to the two functions*/
 		marker.addListener('click', (function(placeCopy) {
 			return function() {
@@ -476,9 +477,10 @@ function ViewModel() {
 			this.places()[i].visible(true);
 			markers()[i].setMap(map);
 			
+			/** Make sure all lines are space-separated to avoid bad matches */
 			self.placeStr = this.places()[i].description.toLowerCase() + ' ' +
-				this.places()[i].title.toLowerCase() +  
-				this.places()[i].type.toLowerCase() + 
+				this.places()[i].title.toLowerCase() + ' ' +
+				this.places()[i].type.toLowerCase() + ' ' +
 				this.places()[i].keys.toLowerCase();
 			
 			/** Looks for result (the lowercase version of user input in 
@@ -508,15 +510,50 @@ function ViewModel() {
 		}
 	};	
 	
+	/** This section makes an auto complete feature for search and uses
+	 *  EasyAutoComplete: http://easyautocomplete.com/
+   	 */
 	this.autoFillStr = '';
-	for (var i = 0; i < this.places().length; i++) {
-		self.autoFillStr += this.places()[i].keys + ' ';
+	/** Gets all the key words from places, adds them to the string, makes 
+	 *  sure new lines have a space between
+	 */
+	for (i = 0; i < this.places().length; i++) {
+		self.autoFillStr += this.places()[i].keys + ' ' +
+			this.places()[i].type + ' ';
 	}
+	/** Splits the string on space, makes an array */
 	var arr = self.autoFillStr.split(' ');
-	console.log(arr);
 	
+	/** Duplicate words in the array show up multiple times in the auto-complete
+	 *  list, so this funtion eliminates them. Thanks to:
+	 *  https://dreaminginjavascript.wordpress.com/2008/08/22/eliminating-duplicates/
+	 */
+	function eliminateDuplicates(arr) {
+		var i,
+			len = arr.length,
+			out = [],
+			obj = {};
+
+	  for (i = 0; i < len; i++) {
+		/** The next line makes a key:value pair of item: 0. In JS objects,
+		 *  keys are unique, so duplicaates get overwritten as the loop runs.
+		 */
+			obj[arr[i]] = 0;
+	  }
+	  /** Finally, we push the keys back to an array, with no duplicates! */
+	  for (i in obj) {
+			out.push(i);
+	  }
+	  return out;
+	}
+	
+	var autoFillItems = eliminateDuplicates(arr);
+	
+	/** Sets data and theme for EasyAutoComplete; 'Match' makes sure that
+	 *  non-matches disappear from the list as you type
+	 */
 	var options = {
-		data: arr,
+		data: autoFillItems,
 		list: {
 			match: {
 				enabled: true
@@ -524,8 +561,10 @@ function ViewModel() {
 		},
 		theme: "dark"
 	};
-
+	/** Calls a method from the autocomplete js on the search field in html */
 	$("#search").easyAutocomplete(options);
+	
+	/** End auto-complete section ---------------------- */
 }
 ko.applyBindings(new ViewModel());
 
