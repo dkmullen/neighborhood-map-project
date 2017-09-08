@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="css/easy-autocomplete.css"> 
+	<link rel="stylesheet" href="css/easy-autocomplete.css">
 	<link rel="stylesheet" href="css/style.css">
     <title>Neighborhood Map</title>
 </head>
@@ -14,15 +14,15 @@
 			<h3>Just the good stuff</h3>
 			<p><a href="http://dkmullen.com">dkmullen.com</a></p>
 		</div>
-		
+
 		<div id="map"></div>
-		
+
 		<!-- Binds the menu to showMenu function to show or hide as needed -->
 		<div id="info-box" data-bind="visible: showMenu">
-		
+
 			<!-- Binds each menu item to a place in the places array -->
 			<ul id="menu" data-bind="foreach: places">
-			
+
 				<!-- Binds each list item to a title of a place in array,
 				 sets a click action to activate the match function,
 				 makes a visible binding to the visible property
@@ -30,24 +30,24 @@
 				<li data-bind="text: title, click: match,
 					visible: visible"></li>
 			</ul>
-			
+
 			<!-- Binds the no-matches message to noMatches function, displays
 			the message if search fails-->
-			<div id="no-matches" data-bind="style: { visibility: noMatches() > 
+			<div id="no-matches" data-bind="style: { visibility: noMatches() >
 				0 ? 'visible' : 'hidden'}">No matching results
 			</div>
-			
+
 			<!-- The two bindings send the filterStr term to the filter function -->
 			<form id="filter" data-bind="submit: filter">
-				
+
 				<!-- This search field is linked via jQuery to an EasyAutoComplete
 				 feature in the ViewModel -->
-				<input id="search" type="text" placeholder="Search for something" 
+				<input id="search" type="text" placeholder="Search for something"
 					data-bind="value: filterStr">
 				<!-- The green check button -->
 				<input id="submit" type="submit" value="">
-				
-				<!-- Binds the show button (circular arrow) to showAll function, 
+
+				<!-- Binds the show button (circular arrow) to showAll function,
 				restores all items to the menu -->
 				<button id="show" data-bind="click: showAll"></button>
 			</form>
@@ -55,67 +55,67 @@
 			<p id="search-hints">Enter business name, type, keywords</p>
 		</div>
 		<!-- End info-box (the container for the nav menu) -->
-		
+
 		<div id="hamburger-menu">
-		<!-- Binds hamburger button to toggle function, toggles the 
+		<!-- Binds hamburger button to toggle function, toggles the
 				menu on moble devices -->
-			<button type="button" class="hamburger-button" alt="hamburger-menu" data-bind="click: toggleMenu">	
+			<button type="button" class="hamburger-button" alt="hamburger-menu" data-bind="click: toggleMenu">
 					<span class="horiz-bar"></span>
 					<span class="horiz-bar"></span>
 					<span class="horiz-bar"></span>
 			</button>
 		</div>
-		
-		<!-- Opens and closes the credits box, which can also be closed with the 
+
+		<!-- Opens and closes the credits box, which can also be closed with the
 		'X' button below -->
 		<button id="info-button" data-bind="click: toggleCredits"></button>
-		
+
 		<!-- Credits box -->
 		<div id="credits" data-bind="visible: showCredits">
 			<h3><strong>Neighborhood Map Project</strong></h3>
 			<p>For <a href="http://udacity.com">Udacity</a> - By Dennis Mullen</p>
-			
+
 			<ul>
-				<li><strong>Replay, checkmark, circle</strong> and 
-				<strong>knife</strong> graphics are by 
-				<a href="http://www.freepik.com/">Freepik</a> from 
-				<a href="http://www.flaticon.com/">Flaticon</a> and are 
-				licensed under <a href="http://creativecommons.org/licenses/by/3.0/" 
-				title="Creative Commons BY 3.0">CC BY 3.0</a>. Made with 
+				<li><strong>Replay, checkmark, circle</strong> and
+				<strong>knife</strong> graphics are by
+				<a href="http://www.freepik.com/">Freepik</a> from
+				<a href="http://www.flaticon.com/">Flaticon</a> and are
+				licensed under <a href="http://creativecommons.org/licenses/by/3.0/"
+				title="Creative Commons BY 3.0">CC BY 3.0</a>. Made with
 				<a href="http://logomakr.com" title="Logo Maker">Logo Maker</a></li>
-				
-				<li>Miu Icons graphic <strong>(Pizza)</strong> by 
-				<a href="http://linhpham.me/miu">Linh Pham</a> from 
-				<a href="http://www.flaticon.com/">Flaticon</a> is licensed under 
-				<a href="http://creativecommons.org/licenses/by/3.0/" 
-				title="Creative Commons BY 3.0">CC BY 3.0</a>. Made with 
+
+				<li>Miu Icons graphic <strong>(Pizza)</strong> by
+				<a href="http://linhpham.me/miu">Linh Pham</a> from
+				<a href="http://www.flaticon.com/">Flaticon</a> is licensed under
+				<a href="http://creativecommons.org/licenses/by/3.0/"
+				title="Creative Commons BY 3.0">CC BY 3.0</a>. Made with
 				<a href="http://logomakr.com" title="Logo Maker">Logo Maker</a></li>
-						
-				<li><strong>Barber pole, X, info</strong> and <strong>cannon</strong> 
-				graphics: <a href="https://icons8.com/">Icons8.com</a>. 
+
+				<li><strong>Barber pole, X, info</strong> and <strong>cannon</strong>
+				graphics: <a href="https://icons8.com/">Icons8.com</a>.
 				<a href="https://icons8.com/license/"> (License)</a></li>
 			</ul>
-			
+
 			<!-- Closes the credits box (this is the second way to do it -->
 			<button id="x" data-bind="click: toggleCredits"></button>
-		</div>	
+		</div>
 		<!-- End credits box -->
-		
-		<!-- If the map fails to load... -->		
+
+		<!-- If the map fails to load... -->
 		<div id="map-fail" data-bind="visible: mapFailMessage">
 			<img id="thumb-down" src= pix/thumb-down.png>
-			<p>Google Maps failed to load. It's very reliable, so I'd check connectivity 
+			<p>Google Maps failed to load. It's very reliable, so I'd check connectivity
 			and reload the page.</p>
 		</div> <!-- End map fail message -->
-		
+
 	</div> <!-- End container -->
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 	<script src="js/oauth-signature.js"></script>
-	<script src='js/knockout-3.4.0.js'></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
 	<script src="js/jquery.easy-autocomplete.min.js"></script>
 	<script src="js/app.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaTU7-mz-PBBAeWvxYOxzKkfNeqG5qwNk&callback=initMap" onerror="googleError()" async defer ></script>
-	
+
 </body>
 </html>
